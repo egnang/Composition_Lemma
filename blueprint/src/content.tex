@@ -52,7 +52,7 @@ a bijection $\sigma\in \text{S}_n \subset
 \end{equation}
 If $\sigma=\text{id}$ (the identity function), then $G_{f}$ --- the functional directed graph prescribed by $f$ --- is gracefully labeled.
 \end{definition}
-\begin{defn}[Automorphism group]\label{defn:aut-functional-graphs}
+\begin{definition}[Automorphism group]\label{defn:aut-functional-graphs}
   %\lean{}
   %\leanok
   %\uses{defn:functional-directed-graphs}
@@ -64,11 +64,11 @@ For a polynomial $P \in \mathbb{C}[x_0, \ldots, x_{n-1}]$, its automorphism grou
 \[
 \text{Aut}\left(P\right)=\large\{\sigma\in\text{S}_{n}:P\left(x_{0},\ldots,x_{i},\ldots,x_{n-1}\right)=P\left(x_{\sigma(0)},\ldots,x_{\sigma(i)},\ldots,x_{\sigma(n-1)}\right)\large\}.
 \]
-\end{defn}
+\end{definition}
 \begin{definition}[Graceful re-labelings]\label{defn:graceful-functional-graphs-set}
   %\lean{}
   %\leanok
-  %\uses{defn:functional-directed-graphs, defn:graceful-functional-graphs}
+  \uses{defn:functional-directed-graphs, defn:graceful-functional-graphs}
 The set of distinct gracefully labeled functional directed graphs isomorphic to $G_{f}$ is
 \[
 \text{GrL}\left(G_{f}\right)\,:=\left\{ G_{\sigma f\sigma^{-1}}:\begin{array}{c}
@@ -80,7 +80,7 @@ The set of distinct gracefully labeled functional directed graphs isomorphic to 
 \begin{definition}[Complementary labeling symmetry]\label{defn:complementary-labeling-symmetry}
   %\lean{}
   %\leanok
-  %\uses{defn:functional-directed-graphs, defn:graceful-functional-graphs}
+  \uses{defn:functional-directed-graphs, defn:graceful-functional-graphs}
 If $\varphi=n-1-\text{id}$, then for all $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ we have
 \begin{equation}
 \left|f(i)-i\right|=\left|\varphi f(i)-\varphi(i)\right|,\quad\forall\,i\in\mathbb{Z}_{n}.
@@ -258,26 +258,26 @@ Then the following hold:
   \]
   Thus $\overline{H_1} + \overline{H_2} = \overline{H}$ as claimed.
 \end{proof}
-\begin{defn}[Polynomial of Grace]\label{defn:polynomial-grace-definition} We define $P_f \in \mathbb{C}[x_0, \ldots, x_{n-1}]$ for all $f \in \mathbb{Z}_n^{\mathbb{Z}_n}$ as follows:
+\begin{definition}[Polynomial of Grace]\label{defn:polynomial-grace-definition} We define $P_f \in \mathbb{C}[x_0, \ldots, x_{n-1}]$ for all $f \in \mathbb{Z}_n^{\mathbb{Z}_n}$ as follows:
 \begin{equation}
     P_f \coloneq \underbrace{\prod_{0\le u<v<n}(x_{v}-x_{u})}_{V_f(x_0,\ldots,x_{n-1})}\,\underbrace{\prod_{0\le u<v<n}\big((x_{f(v)}-x_{v})^{2}-(x_{f(u)}-x_{u})^{2}\big)}_{E_f(x_0,\ldots,x_{n-1})}.
 \end{equation}
-\end{defn}
-\begin{defn}[Congruence class]\label{defn:polynomial-congruence}
+\end{definition}
+\begin{definition}[Congruence class]\label{defn:polynomial-congruence}
   %\lean{}
   %\leanok
-  %\uses{prop:multivariate-quotient-remainder}
+  \uses{prop:multivariate-quotient-remainder}
 For polynomials $P,Q \in \mathbb{C}[x_0, \ldots, x_{n-1}]$, if
 \begin{equation}
 P({\bf x}) \equiv \; Q({\bf x}) \; \mod\bigg\{\prod_{j\in\mathbb{Z}_{n}}(x_{i}-j):i\in\mathbb{Z}_{n}\bigg\},
 \end{equation}
 we simply say $P \equiv Q$. All congruence relations in this paper are modulo the set prescribed above.
-\end{defn}
+\end{definition}
 
 \begin{proposition}[Certificate of Grace]\label{prop:polynomial-grace-certificate}
   %\lean{}
   %\leanok
-  %\uses{defn:polynomial-grace-definition, defn:polynomial-congruence, prop:multivariate-quotient-remainder}
+  \uses{defn:polynomial-grace-definition, defn:polynomial-congruence, prop:multivariate-quotient-remainder}
 Let $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$. The functional
 directed graph $G_f$ prescribed by $f$ is graceful if and only if $P_f(\mathbf{x}) \; \not\equiv \; 0$.
 \end{proposition}
@@ -694,7 +694,7 @@ thus establishing the desired claim.
 
 \end{proof}
 
-\begin{prop}[Composition Inequality]\label{prop:composition-lemma-ineq}
+\begin{proposition}[Composition Inequality]\label{prop:composition-lemma-ineq}
   %\lean{}
   %\leanok
   %\uses{defn:graceful-functional-graphs, defn:graceful-functional-graphs-set, prop:multivariate-quotient-remainder, defn:polynomial-grace-definition, defn:polynomial-congruence, prop:polynomial-grace-certificate}
@@ -714,7 +714,7 @@ $\left|f^{\left(n-1\right)}\left(\mathbb{Z}_{n}\right)\right|=1$. The following 
     \text{GrL}(G_f) \neq \varnothing
     \]
 \end{enumerate}
-\end{prop}
+\end{proposition}
 \begin{proof}
 If $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ is identically constant,
 then $G_{f}$ is graceful. We see this from the fact that the functional
