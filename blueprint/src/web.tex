@@ -4,24 +4,38 @@
 % It is otherwise a very minimal preamble (you should probably at least
 % add cleveref and tikz-cd).
 
-\documentclass{report}
+\documentclass{amsbook}
 
 \usepackage{amssymb, amsthm, amsmath}
 \usepackage{hyperref}
 \usepackage[showmore, dep_graph]{blueprint}
-
+\usepackage{comment}
+\usepackage{sagetex}
+\usepackage{nicefrac}
+\usepackage{tikz-cd}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=0.5in,rmargin=0.5in}
+\usepackage[mathlines]{lineno}
 
 \input{macros/common}
 \input{macros/web}
 
-\home{https://egnang.github.io/Composition_Lemma}
-\github{https://github.com/egnang/Composition_Lemma}
-\dochome{https://egnang.github.io/Composition_Lemma/docs}
 
-\title{Composition_Lemma}
-\author{Edinah}
+%\github{https://github.com/gnang/Composition-Lemma}
+
+
+\title{Composition Lemma}
+\author{Edinah Gnang}
+\author{Parikshit Chalise}
 
 \begin{document}
+\linenumbers
 \maketitle
+\tableofcontents
+
 \input{content}
+
+\bibliographystyle{alpha}
+\bibliography{biblio}
+
 \end{document}

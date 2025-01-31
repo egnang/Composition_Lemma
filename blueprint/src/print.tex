@@ -10,13 +10,19 @@
 % It is otherwise a very minimal preamble (you should probably at least
 % add cleveref and tikz-cd).
 
-\documentclass[a4paper]{report}
+\documentclass{amsbook}
 
 \usepackage{geometry}
-
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=0.5in,rmargin=0.5in}
+\usepackage[mathlines]{lineno}
+\usepackage{tikz}
+\usepackage{comment}
+\usetikzlibrary{arrows.meta}
+\usepackage[mathlines]{lineno}
 \usepackage{expl3}
 
-\usepackage{amssymb, amsthm, mathtools}
+\usepackage{amsmath, amssymb, amsthm, mathtools, nicefrac}
+
 \usepackage[unicode,colorlinks=true,linkcolor=blue,urlcolor=magenta, citecolor=blue]{hyperref}
 
 \usepackage[warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
@@ -24,10 +30,19 @@
 \input{macros/common}
 \input{macros/print}
 
-\title{Composition_Lemma}
-\author{Edinah}
+\title{\texorpdfstring Composition Lemma for Lean}
+\author{Edinah Gnang}
+\author{Parikshit Chalise}
+
 
 \begin{document}
+\linenumbers
 \maketitle
+\tableofcontents
+
 \input{content}
+
+\bibliographystyle{plain}
+\bibliography{biblio}
+
 \end{document}
