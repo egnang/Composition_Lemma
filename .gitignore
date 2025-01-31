@@ -4,6 +4,7 @@
 .lake/*
 .cache/*
 ## Blueprint
+/blueprint/web/
 /blueprint/print/print.log
 /blueprint/src/web.paux
 /blueprint/src/web.bbl
