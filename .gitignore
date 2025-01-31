@@ -5,9 +5,9 @@
 .cache/*
 ## Blueprint
 /blueprint/print/print.log
-/blueprint/web/
 /blueprint/src/web.paux
 /blueprint/src/web.bbl
+/.venv
 ## TeX
 *.aux
 *.lof
@@ -33,4 +33,3 @@
 *.synctex.gz
 *.synctex.gz(busy)
 *.pdfsync
-/.venv
