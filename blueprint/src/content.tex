@@ -42,7 +42,7 @@ V(G_f) = \mathbb{Z}_n, \; E(G_f) = \{(v,f(v)):v \in \mathbb{Z}_n\}.
 \begin{definition}[Graceful functional digraphs]\label{defn:graceful-functional-graphs}
   %\lean{}
   %\leanok
-  \uses{defn:functional-directed-graphs}
+  %\uses{defn:functional-directed-graphs}
 The functional directed graph prescribed by $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ is graceful if there exist
 a bijection $\sigma\in \text{S}_n \subset
  \mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ such that
@@ -54,7 +54,7 @@ If $\sigma=\text{id}$ (the identity function), then $G_{f}$ --- the functional d
 \begin{definition}[Automorphism group]\label{defn:aut-functional-graphs}
   %\lean{}
   %\leanok
-  \uses{defn:functional-directed-graphs}
+  %\uses{defn:functional-directed-graphs}
 For a functional directed graph $G_f$, its automorphism group, denoted $\text{Aut}\left(G_f\right)$, is defined as follows:
 \[
 \text{Aut}\left(G_f\right) = \large\{\sigma \in \text{S}_n : \{(i, f(i)): i \in \mathbb{Z}_n \} = \{(j, \sigma f \sigma^{-1} (j)) : j \in \mathbb{Z}_n\}\large\}.
@@ -67,7 +67,7 @@ For a polynomial $P \in \mathbb{C}[x_0, \ldots, x_{n-1}]$, its automorphism grou
 \begin{definition}[Graceful re-labelings]\label{defn:graceful-functional-graphs-set}
   %\lean{}
   %\leanok
-  \uses{defn:functional-directed-graphs, defn:graceful-functional-graphs}
+  %\uses{defn:functional-directed-graphs, defn:graceful-functional-graphs}
 The set of distinct gracefully labeled functional directed graphs isomorphic to $G_{f}$ is
 \[
 \text{GrL}\left(G_{f}\right)\,:=\left\{ G_{\sigma f\sigma^{-1}}:\begin{array}{c}
@@ -79,7 +79,7 @@ The set of distinct gracefully labeled functional directed graphs isomorphic to 
 \begin{definition}[Complementary labeling symmetry]\label{defn:complementary-labeling-symmetry}
   %\lean{}
   %\leanok
-  \uses{defn:functional-directed-graphs, defn:graceful-functional-graphs}
+  %\uses{defn:functional-directed-graphs, defn:graceful-functional-graphs}
 If $\varphi=n-1-\text{id}$, then for all $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ we have
 \begin{equation}
 \left|f(i)-i\right|=\left|\varphi f(i)-\varphi(i)\right|,\quad\forall\,i\in\mathbb{Z}_{n}.
@@ -265,7 +265,7 @@ Then the following hold:
 \begin{definition}[Congruence class]\label{defn:polynomial-congruence}
   %\lean{}
   %\leanok
-  \uses{prop:multivariate-quotient-remainder}
+  %\uses{prop:multivariate-quotient-remainder}
 For polynomials $P,Q \in \mathbb{C}[x_0, \ldots, x_{n-1}]$, if
 \begin{equation}
 P({\bf x}) \equiv \; Q({\bf x}) \; \mod\bigg\{\prod_{j\in\mathbb{Z}_{n}}(x_{i}-j):i\in\mathbb{Z}_{n}\bigg\},
@@ -276,7 +276,7 @@ we simply say $P \equiv Q$. All congruence relations in this paper are modulo th
 \begin{proposition}[Certificate of Grace]\label{prop:polynomial-grace-certificate}
   %\lean{}
   %\leanok
-  \uses{defn:polynomial-grace-definition, defn:polynomial-congruence, prop:multivariate-quotient-remainder}
+  %\uses{defn:polynomial-grace-definition, defn:polynomial-congruence, prop:multivariate-quotient-remainder}
 Let $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$. The functional
 directed graph $G_f$ prescribed by $f$ is graceful if and only if $P_f(\mathbf{x}) \; \not\equiv \; 0$.
 \end{proposition}
@@ -360,7 +360,7 @@ thus establishing the desired claim.
 \begin{proposition}[Complementary Labeling Symmetry]\label{prop:complementary-labeling-Symmetry}
 %\lean{}
   %\leanok
-  \uses{defn:graceful-functional-graphs, defn:graceful-functional-graphs-set, prop:multivariate-quotient-remainder, defn:polynomial-grace-definition, defn:polynomial-congruence, prop:polynomial-grace-certificate, prop:complementary-labeling-Symmetry}
+  %\uses{defn:graceful-functional-graphs, defn:graceful-functional-graphs-set, prop:multivariate-quotient-remainder, defn:polynomial-grace-definition, defn:polynomial-congruence, prop:polynomial-grace-certificate, prop:complementary-labeling-Symmetry}
 Let $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ and
 \begin{equation}
 \overline{P}_f(\mathbf{x}):=\prod_{v\in\mathbb{Z}_{n}}\left(v!\right)^{2}\frac{\left(n-1+v\right)!}{\left(2v\right)!}\sum_{\begin{array}{c}
@@ -457,7 +457,7 @@ thus establishing the desired claim.
 \begin{lemma}[Variable Dependency] \label{lem:variable-dependency}
   %\lean{}
   %\leanok
-  \uses{prop:multivariate-quotient-remainder}
+  %\uses{prop:multivariate-quotient-remainder}
 Let $P\in\mathbb{Q}\left[x_{0},\ldots,x_{n-1}\right]$
 and $S\subsetneq\mathbb{Z}_{n}$. If
 \begin{equation}
@@ -509,7 +509,7 @@ as claimed.
 \begin{lemma} [Monomial support] \label{lem:monomial-support}
   %\lean{}
   %\leanok
-  \uses{prop:multivariate-quotient-remainder}
+  %\uses{prop:multivariate-quotient-remainder}
  Let $P\in\mathbb{Q}[x_{0},\ldots,x_{n-1}]$ be such that it is not identically
 constant. If
 \begin{equation}
@@ -574,7 +574,7 @@ the desired claim.
 \begin{lemma}[Transposition Invariance]\label{lem:transposition-invariance}
   %\lean{}
   %\leanok
-  \uses{defn:graceful-functional-graphs, defn:graceful-functional-graphs-set, prop:multivariate-quotient-remainder, defn:polynomial-grace-definition, defn:polynomial-congruence, prop:polynomial-grace-certificate, lem:transposition-invariance, lem:variable-dependency}
+  %\uses{defn:graceful-functional-graphs, defn:graceful-functional-graphs-set, prop:multivariate-quotient-remainder, defn:polynomial-grace-definition, defn:polynomial-congruence, prop:polynomial-grace-certificate, lem:transposition-invariance, lem:variable-dependency}
 Let $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ be such that its functional directed graph $G_{f}$ has at least two sibling leaf nodes, i.e., $G_f$ has vertices $u,v\in\mathbb{Z}_{n}$ such that
 $f^{-1}\big(\{u,v\}\big)=\varnothing$ and $f(u)=f(v)$. If
 the transposition $\tau\in\textrm{S}_{n}$ exchanges $u$ and
@@ -648,7 +648,7 @@ thus establishing the desired claim.
 \begin{proposition}[Composition Inequality]\label{prop:composition-lemma-ineq}
   %\lean{}
   %\leanok
-  \uses{defn:graceful-functional-graphs, defn:graceful-functional-graphs-set, prop:multivariate-quotient-remainder, defn:polynomial-grace-definition, defn:polynomial-congruence, prop:polynomial-grace-certificate}
+  %\uses{defn:graceful-functional-graphs, defn:graceful-functional-graphs-set, prop:multivariate-quotient-remainder, defn:polynomial-grace-definition, defn:polynomial-congruence, prop:polynomial-grace-certificate}
 Consider an arbitrary $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ subject to the fixed point condition
 $\left|f^{\left(n-1\right)}\left(\mathbb{Z}_{n}\right)\right|=1$. The following statements are equivalent:
 \begin{enumerate}
@@ -722,7 +722,7 @@ Having assembled together the pieces required to prove our main result, we proce
 \begin{lemma}[Composition Lemma]\label{lem:composition-lemma}
     %\lean{}
   %\leanok
-  \uses{defn:graceful-functional-graphs, defn:graceful-functional-graphs-set, prop:multivariate-quotient-remainder, defn:polynomial-grace-definition, defn:polynomial-congruence, prop:polynomial-grace-certificate, prop:composition-lemma-ineq}
+  %\uses{defn:graceful-functional-graphs, defn:graceful-functional-graphs-set, prop:multivariate-quotient-remainder, defn:polynomial-grace-definition, defn:polynomial-congruence, prop:polynomial-grace-certificate, prop:composition-lemma-ineq}
  For all $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ subject to the contraction
 $\left|f^{\left(n-1\right)}\left(\mathbb{Z}_{n}\right)\right|=1$,
 we have
@@ -964,23 +964,6 @@ yields an expression of $P_{g}$ of the form
 \end{equation}
 
 The monochromatic red expressions in the multi-binomial expansion collect to result in ${\color{red}P_{f}}$ as written in equation \eqref{eq:Pf_rewrite}.
-% \[
-% \begin{array}{cc}
-% {\color{red}P_{f}}= & \underset{0\le i<j<n}{\prod}\left(x_{j}-x_{i}\right)\times\\
-%  & \underset{0\le u<v\le f\left(n-1\right)}{\prod}\left((x_{f\left(v\right)}-x_{v})^{2}-(x_{f\left(u\right)}-x_{u})^{2}\right)\underset{\begin{array}{c}
-% v\in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)\\
-% f\left(n-1\right)<u<v
-% \end{array}}{\prod}\left({\color{red}b_{v}}-{\color{red}b_{u}}\right)\times\\
-%  & \bigg(\underset{\begin{array}{c}
-% v\in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)\\
-% f\left(n-1\right)<u<v
-% \end{array}}{\prod}\big({\color{red}b_{v}}+{\color{red}b_{u}}\big)\bigg)\bigg(\underset{\begin{array}{c}
-% t\in\left\{ 0,1\right\} \\
-% v\in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)\\
-% 0\le u\le f\left(n-1\right)
-% \end{array}}{\prod}{\color{red}b_{u,v,t}}\bigg).
-% \end{array}
-% \]
 The second part denoted $R_{f,g}$ simply collects the remaining bichromatic
 summands and is given by
 \[

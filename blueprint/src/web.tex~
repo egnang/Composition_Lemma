@@ -11,6 +11,7 @@
 \usepackage[showmore, dep_graph]{blueprint}
 \usepackage{comment}
 \usepackage{nicefrac}
+\usepackage{tikz-cd}
 \usepackage{geometry}
 \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=0.5in,rmargin=0.5in}
 
