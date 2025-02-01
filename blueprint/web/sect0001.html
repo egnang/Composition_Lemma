@@ -155,11 +155,31 @@
     <a class="icon proof" href="sect0001.html#defn:graceful-functional-graphs">#</a>
     
     
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="sect0001.html#defn:functional-directed-graphs">Definition 1</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
     
         </div>
   </div>
   <div class="definition_thmcontent">
-  <p> The functional directed graph prescribed by \(f\in \mathbb {Z}_{n}^{\mathbb {Z}_{n}}\) is graceful if there exist a bijection \(\sigma \in \text{S}_n \subset \mathbb {Z}_{n}^{\mathbb {Z}_{n}}\) such that </p>
+  <p>  The functional directed graph prescribed by \(f\in \mathbb {Z}_{n}^{\mathbb {Z}_{n}}\) is graceful if there exist a bijection \(\sigma \in \text{S}_n \subset \mathbb {Z}_{n}^{\mathbb {Z}_{n}}\) such that </p>
 <div class="equation" id="a0000000009">
 <p>
   <div class="equation_content">
@@ -530,7 +550,7 @@
 <div class="equation" id="a0000000037">
 <p>
   <div class="equation_content">
-    \begin{equation}  P_f \coloneq \underbrace{\prod _{0\le u{\lt}v{\lt}n}(x_{v}-x_{u})}_{V_f(x_0,\ldots ,x_{n-1})}\, \underbrace{\prod _{0\le u{\lt}v{\lt}n}\big((x_{f(v)}-x_{v})^{2}-(x_{f(u)}-x_{u})^{2}\big)}_{E_f(x_0,\ldots ,x_{n-1})}. \end{equation}
+    \begin{equation}  P_f \, := \underbrace{\prod _{0\le u{\lt}v{\lt}n}(x_{v}-x_{u})}_{V_f(x_0,\ldots ,x_{n-1})}\, \underbrace{\prod _{0\le u{\lt}v{\lt}n}\big((x_{f(v)}-x_{v})^{2}-(x_{f(u)}-x_{u})^{2}\big)}_{E_f(x_0,\ldots ,x_{n-1})}. \end{equation}
   </div>
   <span class="equation_label">1.19</span>
 </p>
@@ -1250,7 +1270,7 @@
 </p>
 </div>
 <p> By construction, the polynomial </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x1070c7fb0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x1076e3f50>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:Pf_broken} \begin{array}{cc} P_{f}\left(\mathbf{x}\right)=\underset {0\le i{\lt}j{\lt}n}{\prod }\left(x_{j}-x_{i}\right)\times \\ \underset {\begin{array}{c} 0\le u{\lt}v\le f\left(n-1\right)\\ t\in \left\{  0,1\right\}  \end{array}}{\prod } &  \bigg(x_{f\left(v\right)}-x_{v}+\left(-1\right)^{t}(x_{f\left(u\right)}-x_{u})\bigg)\times \\ \underset {\begin{array}{c} v\in f^{-1}\left(\left\{  f\left(n-1\right)\right\}  \right)\\ 0\le u\le f\left(n-1\right)\\ t\in \left\{  0,1\right\}  \end{array}}{\prod } &  \bigg(x_{f\left(v\right)}-x_{v}+\left(-1\right)^{t}(x_{f\left(u\right)}-x_{u})\bigg)\times \\ \underset {\begin{array}{c} v\in f^{-1}\left(\left\{  f\left(n-1\right)\right\}  \right)\\ f\left(n-1\right){\lt}u{\lt}v\\ t\in \left\{  0,1\right\}  \end{array}}{\prod } &  \bigg(x_{f\left(v\right)}-x_{v}+\left(-1\right)^{t}(x_{f\left(u\right)}-x_{u})\bigg), \end{array} \end{equation}
@@ -1259,7 +1279,7 @@
 </p>
 </div>
 <p> differs only slightly from </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x107106090>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x10772a030>">
 <p>
   <div class="equation_content">
     \begin{equation} \label{eq:Pg_broken} \begin{array}{ccc}&  P_{g}\left(\mathbf{x}\right)=\underset {0\le i{\lt}j{\lt}n}{\prod }\left(x_{j}-x_{i}\right)\times \\ &  \underset {\begin{array}{c} 0\le u{\lt}v\le f\left(n-1\right)\\ t\in \left\{  0,1\right\}  \end{array}}{\prod } &  \bigg(x_{f\left(v\right)}-x_{v}+\left(-1\right)^{t}(x_{f\left(u\right)}-x_{u})\bigg)\times \\ &  \underset {\begin{array}{c} v\in f^{-1}\left(\left\{  f\left(n-1\right)\right\}  \right)\\ 0\le u\le f\left(n-1\right)\\ t\in \left\{  0,1\right\}  \end{array}}{\prod } &  \bigg(x_{f^{\left(2\right)}\left(v\right)}-x_{v}+\left(-1\right)^{t}(x_{f\left(u\right)}-x_{u})\bigg)\times \\ &  \underset {\begin{array}{c} v\in f^{-1}\left(\left\{  f\left(n-1\right)\right\}  \right)\\ f\left(n-1\right){\lt}u{\lt}v\\ t\in \left\{  0,1\right\}  \end{array}}{\prod } &  \bigg(x_{f^{\left(2\right)}\left(v\right)}-x_{v}+\left(-1\right)^{t}(x_{f^{\left(2\right)}\left(u\right)}-x_{u})\bigg). \end{array} \end{equation}
@@ -1289,7 +1309,7 @@
 \end{bgroup}} }{\prod } \bigg( {\color {blue}(}x_{f^{\left(2\right)}\left(n-1\right)} {\color {blue}- x_{f\left(n-1\right)}}{\color {blue})} + {\color {red}(x_{f\left(v\right)}} - x_{v}{\color {red})} + \left(-1\right)^{t} \big( {\color {blue}(}x_{f^{\left(2\right)}\left(n-1\right)} {\color {blue}- x_{f\left(n-1\right)}}{\color {blue})} + {\color {red}(x_{f\left(u\right)}} - x_{u}{\color {red})} \big) \bigg). \end{array}  \]
 </div>
 <p>For notational convenience, we write </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x1071b36b0>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x1077d7650>">
 <p>
   <div class="equation_content">
     \begin{equation}  \begin{aligned} P_{g}= &  \quad \prod _{0\leq i{\lt}j{\lt}n}\left(x_{j}-x_{i}\right)\times \\[10pt]&  \prod _{0\leq u{\lt}v\leq f\left(n-1\right)}\left(\left(x_{f(v)}-x_{v}\right)^{2}-\left(x_{f(u)}-x_{u}\right)^{2}\right)\times \\ &  \prod _{\substack {v\in f^{-1}\left(\{ f(n-1)\} \right)\\ \begin{bgroup} 0\leq u\leq f\left(n-1\right)
@@ -1315,7 +1335,7 @@
   \[  {\color {red} b_{u,v,t}} = {\color {red} ( x_{f(v)}} - x_{v} {\color {red})} + (-1)^{t} \left( x_{f(u)} - x_{u} \right), \quad \forall \; \;  \substack { v \in f^{-1}\left(\{ f(n-1)\} \right) \\ 0 \leq u \leq f(n-1) \\ t \in \{ 0, 1\} . }  \]
 </div>
 <p> Note that adopting the same notation, we may also re-write \(P_f\) in equation ?? as follows: </p>
-<div class="equation" id="<plasTeX.TeXFragment object at 0x10720d070>">
+<div class="equation" id="<plasTeX.TeXFragment object at 0x1078290d0>">
 <p>
   <div class="equation_content">
     \begin{equation}  \begin{aligned} {\color {red}P_{f}} &  =\: \prod _{0\leq i{\lt}j{\lt}n}\left(x_{j}-x_{i}\right)\times \\[10pt]&  \; \prod _{0\leq u{\lt}v\leq f\left(n-1\right)}\left(\left(x_{f(v)}-x_{v}\right)^{2}-\left(x_{f(u)}-x_{u}\right)^{2}\right)\times \\ &  \prod _{\substack {v\in f^{-1}\left(\{ f(n-1)\} \right)\\ \begin{bgroup} 0\leq u\leq f(n-1)

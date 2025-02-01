@@ -42,7 +42,7 @@ V(G_f) = \mathbb{Z}_n, \; E(G_f) = \{(v,f(v)):v \in \mathbb{Z}_n\}.
 \begin{definition}[Graceful functional digraphs]\label{defn:graceful-functional-graphs}
   %\lean{}
   %\leanok
-  %\uses{defn:functional-directed-graphs}
+  \uses{defn:functional-directed-graphs}
 The functional directed graph prescribed by $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ is graceful if there exist
 a bijection $\sigma\in \text{S}_n \subset
  \mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ such that
@@ -259,7 +259,7 @@ Then the following hold:
 \end{proof}
 \begin{definition}[Polynomial of Grace]\label{defn:polynomial-grace-definition} We define $P_f \in \mathbb{C}[x_0, \ldots, x_{n-1}]$ for all $f \in \mathbb{Z}_n^{\mathbb{Z}_n}$ as follows:
 \begin{equation}
-    P_f \coloneq \underbrace{\prod_{0\le u<v<n}(x_{v}-x_{u})}_{V_f(x_0,\ldots,x_{n-1})}\,\underbrace{\prod_{0\le u<v<n}\big((x_{f(v)}-x_{v})^{2}-(x_{f(u)}-x_{u})^{2}\big)}_{E_f(x_0,\ldots,x_{n-1})}.
+    P_f \,:= \underbrace{\prod_{0\le u<v<n}(x_{v}-x_{u})}_{V_f(x_0,\ldots,x_{n-1})}\,\underbrace{\prod_{0\le u<v<n}\big((x_{f(v)}-x_{v})^{2}-(x_{f(u)}-x_{u})^{2}\big)}_{E_f(x_0,\ldots,x_{n-1})}.
 \end{equation}
 \end{definition}
 \begin{definition}[Congruence class]\label{defn:polynomial-congruence}
