@@ -249,7 +249,7 @@
       <span class="definition_thmlabel">4</span><span class="definition_thmtitle">Graceful re-labelings</span></div>
     <div class="thm_thmcontent"><p> The set of distinct gracefully labeled functional directed graphs isomorphic to \(G_{f}\) is </p>
 <div class="displaymath" id="a0000000013">
-  \[  \text{GrL}\left(G_{f}\right)\, :=\left\{  G_{\sigma f\sigma ^{-1}}:\begin{array}{c} \sigma \text{ is a representative of a coset in }\nicefrac {\text{S}_{n}}{\text{Aut}\left(G_{f}\right)}\text{ and }\\ \mathbb {Z}_{n}=\left\{  \left|\sigma f\sigma ^{-1}\left(i\right)-i\right|\, :\, i\in \mathbb {Z}_{n}\right\}  \end{array}\right\}   \]
+  \[  \text{GrL}\left(G_{f}\right)\, :=\left\{  G_{\sigma f\sigma ^{-1}}:\begin{array}{c} \sigma \text{ is a representative of a coset of }{\text{Aut}\left(G_{f}\right)}\text{ and }\\ \mathbb {Z}_{n}=\left\{  \left|\sigma f\sigma ^{-1}\left(i\right)-i\right|\, :\, i\in \mathbb {Z}_{n}\right\}  \end{array}\right\}   \]
 </div>
 </div>
 
@@ -396,18 +396,16 @@
       </span>
       <span class="lemma_thmlabel">13</span><span class="lemma_thmtitle">Monomial support</span></div>
     <div class="thm_thmcontent"><p>  Let \(P\in \mathbb {Q}[x_{0},\ldots ,x_{n-1}]\) be such that it is not identically constant. If </p>
-<div class="equation" id="a0000000064">
+<div class="equation" id="a0000000066">
 <p>
   <div class="equation_content">
-    \begin{equation}  P(\mathbf{x})\; =\; \sum _{\sigma \in \text{S}_{n}}a_{\sigma }\prod _{\begin{array}{c} \substack {i\in \mathbb {Z}_{n}\\ \begin{bgroup} j_{i}\in \mathbb {Z}_{n}\backslash \{ \sigma (i)\}  
-
-\end{bgroup}} \end{array}}\left(\frac{x_{i}-j_{i}}{\sigma (i)-j_{i}}\right), \end{equation}
+    \begin{equation}  P(\mathbf{x})\; =\; \sum _{\sigma \in \text{S}_{n}}a_{\sigma }\prod _{i\in \mathbb {Z}_{n}}\left(\prod _{j_{i}\in \mathbb {Z}_{n}\backslash \{ \sigma (i)\} }\bigg(\frac{x_{i}-j_{i}}{\sigma (i)-j_{i}}\bigg)\right) \end{equation}
   </div>
   <span class="equation_label">1.32</span>
 </p>
 </div>
 <p> then there exist a minimal non-empty set \(\mathcal{M}_{P}\subset \mathbb {Z}_{n}^{\mathbb {Z}_{n}}\) subject to \(\left|f^{-1}\left(\left\{  0\right\}  \right)\right|\le 1\) for all \(f\in \mathcal{M}_{P}\) such that </p>
-<div class="equation" id="a0000000065">
+<div class="equation" id="a0000000067">
 <p>
   <div class="equation_content">
     \begin{equation}  P(\mathbf{x})=\sum _{f\in \mathcal{M}_{P}}c_{f}\prod _{i\in \mathbb {Z}_{n}}x_{i}^{f\left(i\right)}, \end{equation}
@@ -446,11 +444,11 @@
       </span>
       <span class="lemma_thmlabel">14</span><span class="lemma_thmtitle">Transposition Invariance</span></div>
     <div class="thm_thmcontent"><p> Let \(f\in \mathbb {Z}_{n}^{\mathbb {Z}_{n}}\) be such that its functional directed graph \(G_{f}\) has at least two sibling leaf nodes, i.e., \(G_f\) has vertices \(u,v\in \mathbb {Z}_{n}\) such that \(f^{-1}\big(\{ u,v\} \big)=\varnothing \) and \(f(u)=f(v)\). If the transposition \(\tau \in \textrm{S}_{n}\) exchanges \(u\) and \(v\), i.e., </p>
-<div class="displaymath" id="a0000000071">
+<div class="displaymath" id="a0000000073">
   \[  \tau (i)=\begin{cases} \begin{array}{cc} v &  \text{ if }i=u\\ u &  \text{ if }i=v\\ i &  \text{otherwise} \end{array}&  \forall \, i\in \mathbb {Z}_{n}.\end{cases}  \]
 </div>
 <p> Then </p>
-<div class="equation" id="a0000000072">
+<div class="equation" id="a0000000074">
 <p>
   <div class="equation_content">
     \begin{equation}  \tau \in \text{Aut}\; (P_{f}({\bf x})), \end{equation}
@@ -489,7 +487,7 @@
       </span>
       <span class="lemma_thmlabel">12</span><span class="lemma_thmtitle">Variable Dependency</span></div>
     <div class="thm_thmcontent"><p>  Let \(P\in \mathbb {Q}\left[x_{0},\ldots ,x_{n-1}\right]\) and \(S\subsetneq \mathbb {Z}_{n}\). If </p>
-<div class="equation" id="a0000000057">
+<div class="equation" id="a0000000059">
 <p>
   <div class="equation_content">
     \begin{equation}  P(\mathbf{x})=\sum _{g\in \mathbb {Z}_{n}^{S}}c_{g}\, \prod _{i\in S}(x_{i})^{g(i)}, \end{equation}
@@ -498,7 +496,7 @@
 </p>
 </div>
 <p> where \(c_g \in \mathbb {C}\) for all \(g\in \mathbb {Z}_{n}^{S}\), then for any positive integer \(m\), the polynomial \(\big(P(\mathbf{x})\big)^{m}\) admits a quotient-remainder expansion of the form </p>
-<div class="equation" id="a0000000058">
+<div class="equation" id="a0000000060">
 <p>
   <div class="equation_content">
     \begin{equation}  \big(P(x_0,\ldots ,x_{n-1})\big)^{m}=\sum _{j\in \mathbb {Z}_{m}}q_{j}(x_0,\ldots ,x_{n-1})\prod _{k\in \mathbb {Z}_{n}}(x_{j}-\alpha _{k})+\sum _{g\in \mathbb {Z}_{n}^{S}}a_{g}\prod _{i\in S}(x_{i})^{g(i)} \end{equation}
@@ -537,12 +535,13 @@
       </span>
       <span class="proposition_thmlabel">11</span><span class="proposition_thmtitle">Complementary Labeling Symmetry</span></div>
     <div class="thm_thmcontent"><p> Let \(f\in \mathbb {Z}_{n}^{\mathbb {Z}_{n}}\) and </p>
-<div class="equation" id="a0000000046">
+<div class="displaymath" id="a0000000047">
+  \[  \overline{P}_{f}(\mathbf{x}):=  \]
+</div>
+<div class="equation" id="a0000000048">
 <p>
   <div class="equation_content">
-    \begin{equation}  \overline{P}_{f}(\mathbf{x}):=\prod _{v\in \mathbb {Z}_{n}}\left(v!\right)^{2}\frac{\left(n-1+v\right)!}{\left(2v\right)!}\sum _{\begin{array}{c} \sigma \in \text{S}_{n},\gamma =\left|\sigma f\sigma ^{-1}-\text{id}\right|\in \text{S}_{n}\end{array}}\text{sgn}(\gamma \sigma )\prod _{\begin{array}{c} \substack {i\in \mathbb {Z}_{n}\\ \begin{bgroup} j_{i}\in \mathbb {Z}_{n}\backslash \{ \sigma (i)\}  
-
-\end{bgroup}} \end{array}}\left(\frac{x_{i}-j_{i}}{\sigma (i)-j_{i}}\right). \end{equation}
+    \begin{equation}  \prod _{v\in \mathbb {Z}_{n}}\left(v!\right)^{2}\frac{\left(n-1+v\right)!}{\left(2v\right)!}\sum _{\begin{array}{c} G_{\sigma f\sigma ^{-1}}\in \text{GrL}(G_{f})\end{array}}\text{sgn}(\left|\sigma f\sigma ^{-1}-\text{id}\right|\circ \sigma )\prod _{i\in \mathbb {Z}_{n}}\left(\prod _{j_{i}\in \mathbb {Z}_{n}\backslash \{ \sigma (i)\} }\bigg(\frac{x_{i}-j_{i}}{\sigma (i)-j_{i}}\bigg)\right) \end{equation}
   </div>
   <span class="equation_label">1.26</span>
 </p>
@@ -579,15 +578,15 @@
       <span class="proposition_thmlabel">15</span><span class="proposition_thmtitle">Composition Inequality</span></div>
     <div class="thm_thmcontent"><p> Consider an arbitrary \(f\in \mathbb {Z}_{n}^{\mathbb {Z}_{n}}\) subject to the fixed point condition \(\left|f^{\left(n-1\right)}\left(\mathbb {Z}_{n}\right)\right|=1\). The following statements are equivalent: </p>
 <ol class="enumerate">
-  <li><div class="displaymath" id="a0000000083">
+  <li><div class="displaymath" id="a0000000085">
   \[  \max _{\sigma \in \text{S}_{n}}\left|\left\{  \left|\sigma f^{(2)}\sigma ^{-1}(i)-i\right|:i\in \mathbb {Z}_{n}\right\}  \right|\le \max _{\sigma \in \text{S}_{n}}\left|\left\{  \left|\sigma f\sigma ^{-1}(i)-i\right|:i\in \mathbb {Z}_{n}\right\}  \right|.  \]
 </div>
 </li>
-  <li><div class="displaymath" id="a0000000084">
+  <li><div class="displaymath" id="a0000000086">
   \[  P_{f^{(2)}} ({\bf x}) \not \equiv 0 \implies P_{f} ({\bf x}) \not \equiv 0.  \]
 </div>
 </li>
-  <li><div class="displaymath" id="a0000000085">
+  <li><div class="displaymath" id="a0000000087">
   \[  \text{GrL}(G_f) \neq \varnothing  \]
 </div>
 </li>
@@ -746,7 +745,7 @@ graphContainer.graphviz({useWorker: true})
     .width(width)
     .height(height)
     .fit(true)
-    .renderDot(`strict digraph "" {	graph [bgcolor=transparent];	node [label="\N",		penwidth=1.8	];	edge [arrowhead=vee];	"defn:functional-directed-graphs"	[color=blue,		fillcolor="#A3D6FF",		label="functional-directed-graphs",		shape=box,		style=filled];	"defn:graceful-functional-graphs"	[label="graceful-functional-graphs",		shape=box];	"defn:functional-directed-graphs" -> "defn:graceful-functional-graphs"	[style=dashed];	a0000000012	[color=blue,		fillcolor="#A3D6FF",		label=a0000000012,		shape=box,		style=filled];	"defn:complementary-labeling-symmetry"	[color=blue,		fillcolor="#A3D6FF",		label="complementary-labeling-symmetry",		shape=box,		style=filled];	"defn:polynomial-grace-definition"	[color=blue,		fillcolor="#A3D6FF",		label="polynomial-grace-definition",		shape=box,		style=filled];	"defn:polynomial-congruence"	[color=blue,		fillcolor="#A3D6FF",		label="polynomial-congruence",		shape=box,		style=filled];	"lem:monomial-support"	[color=blue,		fillcolor="#A3D6FF",		label="monomial-support",		shape=ellipse,		style=filled];	"lem:composition-lemma"	[color=blue,		fillcolor="#A3D6FF",		label="composition-lemma",		shape=ellipse,		style=filled];	"prop:multivariate-quotient-remainder"	[color=blue,		fillcolor="#A3D6FF",		label="multivariate-quotient-remainder",		shape=ellipse,		style=filled];	"defn:graceful-functional-graphs-set"	[color=blue,		fillcolor="#A3D6FF",		label="graceful-functional-graphs-set",		shape=box,		style=filled];	"defn:aut-functional-graphs"	[color=blue,		fillcolor="#A3D6FF",		label="aut-functional-graphs",		shape=box,		style=filled];	"lem:variable-dependency"	[color=blue,		fillcolor="#A3D6FF",		label="variable-dependency",		shape=ellipse,		style=filled];	"lem:transposition-invariance"	[color=blue,		fillcolor="#A3D6FF",		label="transposition-invariance",		shape=ellipse,		style=filled];	"prop:ring-homomorphism"	[color=blue,		fillcolor="#A3D6FF",		label="ring-homomorphism",		shape=ellipse,		style=filled];	"prop:polynomial-grace-certificate"	[color=blue,		fillcolor="#A3D6FF",		label="polynomial-grace-certificate",		shape=ellipse,		style=filled];	"prop:complementary-labeling-Symmetry"	[color=blue,		fillcolor="#A3D6FF",		label="complementary-labeling-Symmetry",		shape=ellipse,		style=filled];	"prop:composition-lemma-ineq"	[color=blue,		fillcolor="#A3D6FF",		label="composition-lemma-ineq",		shape=ellipse,		style=filled];}`)
+    .renderDot(`strict digraph "" {	graph [bgcolor=transparent];	node [label="\N",		penwidth=1.8	];	edge [arrowhead=vee];	"defn:functional-directed-graphs"	[color=blue,		fillcolor="#A3D6FF",		label="functional-directed-graphs",		shape=box,		style=filled];	"defn:graceful-functional-graphs"	[label="graceful-functional-graphs",		shape=box];	"defn:functional-directed-graphs" -> "defn:graceful-functional-graphs"	[style=dashed];	a0000000012	[color=blue,		fillcolor="#A3D6FF",		label=a0000000012,		shape=box,		style=filled];	"lem:variable-dependency"	[color=blue,		fillcolor="#A3D6FF",		label="variable-dependency",		shape=ellipse,		style=filled];	"lem:transposition-invariance"	[color=blue,		fillcolor="#A3D6FF",		label="transposition-invariance",		shape=ellipse,		style=filled];	"prop:multivariate-quotient-remainder"	[color=blue,		fillcolor="#A3D6FF",		label="multivariate-quotient-remainder",		shape=ellipse,		style=filled];	"prop:ring-homomorphism"	[color=blue,		fillcolor="#A3D6FF",		label="ring-homomorphism",		shape=ellipse,		style=filled];	"prop:complementary-labeling-Symmetry"	[color=blue,		fillcolor="#A3D6FF",		label="complementary-labeling-Symmetry",		shape=ellipse,		style=filled];	"defn:graceful-functional-graphs-set"	[color=blue,		fillcolor="#A3D6FF",		label="graceful-functional-graphs-set",		shape=box,		style=filled];	"defn:aut-functional-graphs"	[color=blue,		fillcolor="#A3D6FF",		label="aut-functional-graphs",		shape=box,		style=filled];	"defn:complementary-labeling-symmetry"	[color=blue,		fillcolor="#A3D6FF",		label="complementary-labeling-symmetry",		shape=box,		style=filled];	"defn:polynomial-grace-definition"	[color=blue,		fillcolor="#A3D6FF",		label="polynomial-grace-definition",		shape=box,		style=filled];	"defn:polynomial-congruence"	[color=blue,		fillcolor="#A3D6FF",		label="polynomial-congruence",		shape=box,		style=filled];	"lem:monomial-support"	[color=blue,		fillcolor="#A3D6FF",		label="monomial-support",		shape=ellipse,		style=filled];	"lem:composition-lemma"	[color=blue,		fillcolor="#A3D6FF",		label="composition-lemma",		shape=ellipse,		style=filled];	"prop:polynomial-grace-certificate"	[color=blue,		fillcolor="#A3D6FF",		label="polynomial-grace-certificate",		shape=ellipse,		style=filled];	"prop:composition-lemma-ineq"	[color=blue,		fillcolor="#A3D6FF",		label="composition-lemma-ineq",		shape=ellipse,		style=filled];}`)
     .on("end", interactive);
 
 latexLabelEscaper = function(label) {
