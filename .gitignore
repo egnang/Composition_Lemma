@@ -4,9 +4,6 @@
 .lake/*
 .cache/*
 ## Blueprint
-/blueprint/print/print.log
-/blueprint/src/web.paux
-/blueprint/src/web.bbl
 /.venv
 ## TeX
 *.aux
