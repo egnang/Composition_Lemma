@@ -12,6 +12,7 @@
 The \textit{Composition Lemma} was developed and refined over 6 years, beginning in 2018, as a novel approach to settle in the affirmative the \textit{Graceful Tree Conjecture}. The first of such papers was posted in \cite{gnang2020gracefullabelingstrees} by Gnang. A further developed series of papers resolving the same conjecture again appeared in \cite{gnang2022compositionlemma} and \cite{gnang2023proofkotzigringelrosaconjecture}. Recently, the same method has been applied to settle other longstanding conjectures in \cite{chalise2024treenedgesdecomposes} and \cite{chalise2024prooftreepackingconjecture}. We comment that the series of papers shared on the open-source platform arXiv reflect the evolving landscape of Gnang's thought process, and the frequent re-uploads were driven by the natural progression and refinement of ideas. However, we recognize that these numerous edits may have unintentionally caused confusion and raised questions regarding the success of the method. In the current work, we aim to address these concerns by presenting a detailed blueprint of the proof, with the goal of formalizing it in Lean4.
 
 
+
 \section{Functional Directed Graphs}\label{sec:Functional Directed Graphs}
 For notational convenience, let $\mathbb{Z}_{n}$ denote the set whose members are the first $n$ natural numbers, i.e.,
 \begin{equation}
@@ -42,50 +43,59 @@ V(G_f) = \mathbb{Z}_n, \; E(G_f) = \{(v,f(v)):v \in \mathbb{Z}_n\}.
 \begin{definition}[Graceful functional digraphs]\label{defn:graceful-functional-graphs}
   %\lean{}
   %\leanok
-  \uses{defn:functional-directed-graphs}
+  %\uses{defn:functional-directed-graphs}
 The functional directed graph prescribed by $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ is graceful if there exist
 a bijection $\sigma\in \text{S}_n \subset
  \mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ such that
 \begin{equation}
 \big\{\left|\sigma f\sigma^{-1}(i)-i\right|:i\in\mathbb{Z}_{n}\big\}=\mathbb{Z}_{n}.
 \end{equation}
-If $\sigma=\text{id}$ (the identity function), then $G_{f}$ --- the functional directed graph prescribed by $f$ --- is gracefully labeled.
+If $\sigma=\text{id}$ (the identity function), then $G_{f}$ --- the functional directed graph prescribed by $f$ --- is gracefully labeled. 
 \end{definition}
-\begin{definition}[Automorphism group]\label{defn:aut-functional-graphs}
+\begin{defn}[Automorphism group]\label{defn:aut-functional-graphs}
   %\lean{}
   %\leanok
   %\uses{defn:functional-directed-graphs}
 For a functional directed graph $G_f$, its automorphism group, denoted $\text{Aut}\left(G_f\right)$, is defined as follows:
 \[
-\text{Aut}\left(G_f\right) = \large\{\sigma \in \text{S}_n : \{(i, f(i)): i \in \mathbb{Z}_n \} = \{(j, \sigma f \sigma^{-1} (j)) : j \in \mathbb{Z}_n\}\large\}.
+\text{Aut}\left(G_f\right) = \large\{\sigma \in \text{S}_n : \{(i, f(i)): i \in \mathbb{Z}_n \} = \{(j, \sigma f \sigma^{-1} (j)) : j \in \mathbb{Z}_n\}\large\}. 
 \]
 For a polynomial $P \in \mathbb{C}[x_0, \ldots, x_{n-1}]$, its automorphism group, denoted $\text{Aut($P$)}$, is defined as follows:
 \[
 \text{Aut}\left(P\right)=\large\{\sigma\in\text{S}_{n}:P\left(x_{0},\ldots,x_{i},\ldots,x_{n-1}\right)=P\left(x_{\sigma(0)},\ldots,x_{\sigma(i)},\ldots,x_{\sigma(n-1)}\right)\large\}.
 \]
-\end{definition}
+\end{defn}
 \begin{definition}[Graceful re-labelings]\label{defn:graceful-functional-graphs-set}
   %\lean{}
   %\leanok
   %\uses{defn:functional-directed-graphs, defn:graceful-functional-graphs}
-The set of distinct gracefully labeled functional directed graphs isomorphic to $G_{f}$ is
+The set of distinct gracefully labeled functional directed graphs isomorphic to $G_{f}$ is 
 \[
 \text{GrL}\left(G_{f}\right)\,:=\left\{ G_{\sigma f\sigma^{-1}}:\begin{array}{c}
-\sigma\text{ is a representative of a coset of }{\text{Aut}\left(G_{f}\right)}\text{ and }\\
-\mathbb{Z}_{n}=\left\{ \left|\sigma f\sigma^{-1}\left(i\right)-i\right|\,:\,i\in\mathbb{Z}_{n}\right\}
-\end{array}\right\}
+\sigma\text{ is a representative of a coset in }\nicefrac{\text{S}_{n}}{\text{Aut}\left(G_{f}\right)}\text{ and }\\
+\mathbb{Z}_{n}=\left\{ \left|\sigma f\sigma^{-1}\left(i\right)-i\right|\,:\,i\in\mathbb{Z}_{n}\right\} 
+\end{array}\right\} 
 \]
 \end{definition}
-\begin{definition}[Complementary labeling symmetry]\label{defn:complementary-labeling-symmetry}
+\begin{definition}[Complementary labeling involution]\label{defn:complementary-labeling-symmetry}
   %\lean{}
   %\leanok
   %\uses{defn:functional-directed-graphs, defn:graceful-functional-graphs}
-If $\varphi=n-1-\text{id}$, then for all $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ we have
+If $\varphi=n-1-\text{id}$, i.e. $\varphi \in \mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ such that
+\[
+\varphi(i)=n-1-i,\, \forall \,i\in \mathbb{Z}_{n},
+\]
+then for an arbitrary $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ the complementary labeling involution is defined as the map
+\[
+f \mapsto \varphi f \varphi^{-1}
+\]
+\end{definition}
+Observe that for all $f\in \mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ the complementary labeling involution fixes the induced edge label of each edge as seen from the equality
 \begin{equation}
 \left|f(i)-i\right|=\left|\varphi f(i)-\varphi(i)\right|,\quad\forall\,i\in\mathbb{Z}_{n}.
 \end{equation}
 In other words, induced edge labels are fixed by the vertex relabeling effected by $\varphi$. We call this induced edge label symmetry the \emph{complementary labeling symmetry} of the functional directed graph $G_f$.
-\end{definition}
+
 
 \section{Quotient-Remainder Theorem and Lagrange Interpolation}\label{sec:QRT}
  \begin{proposition}[Multivariate Quotient-Remainder]\label{prop:multivariate-quotient-remainder}
@@ -97,11 +107,11 @@ simple roots, i.e.,
 \begin{equation}
 d(x)=\prod_{u\in\mathbb{Z}_{n}}(x-\alpha_{u})\;\text{ and }\:1=\text{GCD}\big(d(x),\,\frac{d}{dx}d(x)\big),
 \end{equation}
-where $\{\alpha_{u}:u\in\mathbb{Z}_{n}\}\subset\mathbb{C}$.
+where $\{\alpha_{u}:u\in\mathbb{Z}_{n}\}\subset\mathbb{C}$. 
 For
 all $P\in\mathbb{C}[x_{0},\ldots,x_{m-1}]$, there exists a unique remainder
 $r(x_{0},\ldots,x_{m-1})\in\mathbb{C}[x_{0},\ldots,x_{m-1}]$ of degree
-at most $n-1$ in each variable such that
+at most $n-1$ in each variable such that 
 \begin{equation}
 P(x_{0},\ldots,x_{m-1})=\sum_{u\in\mathbb{Z}_{m}}q_{u}(x_{0},\ldots,x_{m-1})\,d(x_{u}) \; + \; r(x_{0},\ldots,x_{m-1}).
 \end{equation}
@@ -113,7 +123,7 @@ We prove by induction on the number of variables that
 r(x_{0},\ldots,x_{m-1})=\sum_{g\in\mathbb{Z}_{n}^{\mathbb{Z}_{m}}}P(\alpha_{g})\prod_{i\in\mathbb{Z}_{m}}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{g(i)\}}\bigg(\frac{x_{i}-\alpha_{j_{i}}}{\alpha_{g(i)}-\alpha_{j_{i}}}\bigg)\right),
 \end{equation}
 where for notational convenience $P(\alpha_{g}):=P(\alpha_{g(0)},\ldots,\alpha_{g(m-1)})$.
-The base case stems from the univariate quotient-remainder theorem. The univariate-quotient remainder theorem asserts that there exit
+The base case stems from the univariate quotient-remainder theorem over the field $\mathbb{C}$. The univariate-quotient remainder theorem over the field $\mathbb{C}$ asserts that there exit
 a unique quotient-remainder pair $\big(q(x_{0}),\,r(x_{0})\big)\in\mathbb{C}[x_{0}]\times\mathbb{C}[x_{0}]$
 subject to
 \begin{equation}
@@ -121,7 +131,7 @@ H(x_{0})=q(x_{0})\,d(x_{0})+r(x_{0}),
 \end{equation}
 where $r(x_{0})\in\mathbb{C}[x_{0}]$ is of degree at most $n-1$.
 It is completely determined by its evaluation over $\{\alpha_{i}:i\in\mathbb{Z}_{n}\}$,
-and by Lagrange interpolation we have
+and by Lagrange interpolation we have 
 \begin{equation}
 r(x_{0})=\sum_{g\in\mathbb{Z}_{n}^{\mathbb{Z}_{1}}}H(\alpha_{g(0)})\prod_{j_{0}\in\mathbb{Z}_{n}\backslash\{g(0)\}}\bigg(\frac{x_{0}-\alpha_{j_{0}}}{\alpha_{g(0)}-\alpha_{j_{0}}}\bigg),
 \end{equation}
@@ -133,23 +143,23 @@ F=\sum_{k\in\mathbb{Z}_{m}}q_{k}(x_{0},\ldots,x_{m-1})\,d(x_{k})+\sum_{g\in\math
 \end{equation}
 We proceed to show that the hypothesis implies that every polynomial in
 $m+1$ variables also admits a similar expansion, thus establishing
-the desired claim. Consider a polynomial $H \in \mathbb{C}[x_{0},\ldots,x_{m}]$, we view $H$ as a univariate polynomial in the variable $x_{m}$ whose coefficients lie in the polynomial ring $\mathbb{C}[x_{0},\ldots,x_{m-1}]$.
-The univariate quotient-remainder theorem over this ring asserts that
+the desired claim. Consider a polynomial $H \in \mathbb{C}[x_{0},\ldots,x_{m}]$, we view $H$ as a univariate polynomial in the variable $x_{m}$ whose coefficients lie in the field of fraction $\mathbb{C}(x_{0},\ldots,x_{m-1})$.
+The univariate quotient-remainder theorem over the field of fractions $\mathbb{C}(x_{0},\ldots,x_{m-1})$ asserts that
 there exit a unique quotient-remainder pair
 \[
-\big(q(x_{m}),\,r(x_{m})\big)\in\big(\mathbb{C}[x_{0},\ldots,x_{m-1}]\big)[x_{m}]\times\big(\mathbb{C}[x_{0},\ldots,x_{m-1}]\big)[x_{m}]
+\big(q(x_{m}),\,r(x_{m})\big)\in\big(\mathbb{C}(x_{0},\ldots,x_{m-1})\big)[x_{m}]\times\big(\mathbb{C}(x_{0},\ldots,x_{m-1})\big)[x_{m}]
 \]
 subject to
 \begin{equation}
 H\big(x_{0},\ldots,x_{m}\big)=q(x_{0},\ldots,x_{m})\,d(x_{m})+r(x_{0},\ldots,x_{m}),
 \end{equation}
-where $r\left(x_{0},\ldots,x_{m}\right)\in\big(\mathbb{C}[x_{0},\ldots,x_{m-1}]\big)[x_{m}]$
-is of degree at most $n-1$ in the variable $x_{m}$. We write
+where $r\left(x_{0},\ldots,x_{m}\right)\in\big(\mathbb{C}(x_{0},\ldots,x_{m-1})\big)[x_{m}]$
+is of degree at most $n-1$ in the variable $x_{m}$. We write 
 \begin{equation}
 r\left(x_{0},\ldots,x_{m}\right)=\sum_{k\in\mathbb{Z}_{n}}a_{k}\left(x_{0},\ldots,x_{m-1}\right)\,(x_{m})^{k}.
 \end{equation}
-We see that $a_{k}(x_{0},\ldots,x_{m-1})\in\mathbb{C}[x_{0},\ldots,x_{m-1}]$
-from the equality
+We now show that coefficients $\big\{ a_k(x_{0},\ldots,x_{m-1}):k\in \mathbb{Z}_n \big\}$ all lie in the polynomial ring $\mathbb{C}[x_{0},\ldots,x_{m-1}]$
+via the equality 
 \begin{equation}
 \bigg(\text{Vander}\left(\begin{array}{c}
 \alpha_{0}\\
@@ -171,7 +181,7 @@ H(x_{0},\ldots,x_{m-1},\alpha_{u})\\
 H(x_{0},\ldots,x_{m-1},\alpha_{n-1})
 \end{array}\right),
 \end{equation}
-where
+where 
 \begin{equation}
 \bigg(\text{Vander}\left(\begin{array}{c}
 \alpha_{0}\\
@@ -191,7 +201,7 @@ Since the Vandermonde matrix is invertible by the fact
 \alpha_{u}
 \end{array}\right)\bigg)=\prod_{0\le u<v<n}(\alpha_{v}-\alpha_{u}),
  \end{equation}
-we indeed have
+we indeed have 
 \begin{equation}
 \left(\begin{array}{c}
 a_{0}\left(x_{0},\ldots,x_{m-1}\right)\\
@@ -213,7 +223,7 @@ H(x_{0},\ldots,x_{m-1},\alpha_{u})\\
 H(x_{0},\ldots,x_{m-1},\alpha_{n-1})
 \end{array}\right).
 \end{equation}
-Therefore, we have
+Therefore, we have 
 \begin{equation}
 H\big(x_{0},\ldots,x_{m}\big)
 = q_{m}\big(x_{0},\ldots,x_{m}\big)\,d(x_{m})+\sum_{g(m)\in\mathbb{Z}_{n}}H\big(x_{0},\ldots,x_{m-1},\alpha_{g(m)}\big)\prod_{j\in\mathbb{Z}_{n}\backslash\{g(m)\}}\left(\frac{x_{m}-\alpha_{j_{m}}}{\alpha_{g(m)}-\alpha_{j_{m}}}\right).
@@ -229,7 +239,7 @@ yields the desired claim.
   %\leanok
   %\uses{}
 For an arbitrary $H\in\mathbb{C}\left[x_{0},\ldots,x_{n-1}\right]$, let $\overline{H}$ denote
-the {remainder} of the congruence class
+the {remainder} of the congruence class 
 \[
 H\mod\left\{ d(x_{i}):i\in\mathbb{Z}_{n}\right\} ,
 \]
@@ -239,8 +249,8 @@ d(x)=\prod_{u\in\mathbb{Z}_{n}}(x-\alpha_{u})\;\text{ and }\:1=\text{GCD}\big(d(
 \]
 Then the following hold:
 \begin{enumerate}
-    \item Evaluations over the  lattice $\{\alpha_{u}:u\in\mathbb{Z}_{n}\}^{n}$ of $\overline{H}$ match evaluations of $H$ over the same lattice.
-    \item If $H = H_1 + H_2,$ where $H_1, H_2 \in \mathbb{C}\left[x_{0},\ldots,x_{n-1}\right]$, then $\overline{H_1} + \overline{H_2} = \overline{H}$.
+    \item Evaluations over the  lattice $\{\alpha_{u}:u\in\mathbb{Z}_{n}\}^{n}$ of $\overline{H}$ match evaluations of $H$ over the same lattice. 
+    \item If $H = H_0 + H_1,$ where $H_0, H_1 \in \mathbb{C}\left[x_{0},\ldots,x_{n-1}\right]$, then $\overline{H_0} + \overline{H_1} = \overline{H}$.
 \end{enumerate}
  \end{proposition}
 \begin{proof}
@@ -250,19 +260,19 @@ Then the following hold:
 \overline{H}=\sum_{g\in\mathbb{Z}_{n}^{\mathbb{Z}_{m}}}H(\alpha_{g})\prod_{i\in\mathbb{Z}_{m}}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{g(i)\}}\bigg(\frac{x_{i}-\alpha_{j_{i}}}{\alpha_{g(i)}-\alpha_{j_{i}}}\bigg)\right),
   \]
   \[
-  \implies\overline{H}=\sum_{g\in\mathbb{Z}_{n}^{\mathbb{Z}_{m}}}\big(H_{1}(\alpha_{g})+H_{2}(\alpha_{g})\big)\prod_{i\in\mathbb{Z}_{m}}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{g(i)\}}\bigg(\frac{x_{i}-\alpha_{j_{i}}}{\alpha_{g(i)}-\alpha_{j_{i}}}\bigg)\right),
+  \implies\overline{H}=\sum_{g\in\mathbb{Z}_{n}^{\mathbb{Z}_{m}}}\big(H_{0}(\alpha_{g})+H_{1}(\alpha_{g})\big)\prod_{i\in\mathbb{Z}_{m}}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{g(i)\}}\bigg(\frac{x_{i}-\alpha_{j_{i}}}{\alpha_{g(i)}-\alpha_{j_{i}}}\bigg)\right),
   \]
   \[
-  \implies\overline{H}=\sum_{k\in\{1,2\}}\sum_{g\in\mathbb{Z}_{n}^{\mathbb{Z}_{m}}}H_{k}(\alpha_{g})\prod_{i\in\mathbb{Z}_{m}}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{g(i)\}}\bigg(\frac{x_{i}-\alpha_{j_{i}}}{\alpha_{g(i)}-\alpha_{j_{i}}}\bigg)\right).
+  \implies\overline{H}=\sum_{k\in\{0,1\}}\sum_{g\in\mathbb{Z}_{n}^{\mathbb{Z}_{m}}}H_{k}(\alpha_{g})\prod_{i\in\mathbb{Z}_{m}}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{g(i)\}}\bigg(\frac{x_{i}-\alpha_{j_{i}}}{\alpha_{g(i)}-\alpha_{j_{i}}}\bigg)\right).
   \]
-  Thus $\overline{H_1} + \overline{H_2} = \overline{H}$ as claimed.
+  Thus $\overline{H_0} + \overline{H_1} = \overline{H}$ as claimed.
 \end{proof}
-\begin{definition}[Polynomial of Grace]\label{defn:polynomial-grace-definition} We define $P_f \in \mathbb{C}[x_0, \ldots, x_{n-1}]$ for all $f \in \mathbb{Z}_n^{\mathbb{Z}_n}$ as follows:
+\begin{defn}[Polynomial of Grace]\label{defn:polynomial-grace-definition} We define $P_f \in \mathbb{C}[x_0, \ldots, x_{n-1}]$ for all $f \in \mathbb{Z}_n^{\mathbb{Z}_n}$ as follows:
 \begin{equation}
-    P_f \,:= \underbrace{\prod_{0\le u<v<n}(x_{v}-x_{u})}_{V_f(x_0,\ldots,x_{n-1})}\,\underbrace{\prod_{0\le u<v<n}\big((x_{f(v)}-x_{v})^{2}-(x_{f(u)}-x_{u})^{2}\big)}_{E_f(x_0,\ldots,x_{n-1})}.
+    P_f \coloneq \underbrace{\prod_{0\le u<v<n}(x_{v}-x_{u})}_{V(x_0,\ldots,x_{n-1})}\,\underbrace{\prod_{0\le u<v<n}\big((x_{f(v)}-x_{v})^{2}-(x_{f(u)}-x_{u})^{2}\big)}_{E_f(x_0,\ldots,x_{n-1})}.
 \end{equation}
-\end{definition}
-\begin{definition}[Congruence class]\label{defn:polynomial-congruence}
+\end{defn}
+\begin{defn}[Congruence class]\label{defn:polynomial-congruence}
   %\lean{}
   %\leanok
   %\uses{prop:multivariate-quotient-remainder}
@@ -270,9 +280,12 @@ For polynomials $P,Q \in \mathbb{C}[x_0, \ldots, x_{n-1}]$, if
 \begin{equation}
 P({\bf x}) \equiv \; Q({\bf x}) \; \mod\bigg\{\prod_{j\in\mathbb{Z}_{n}}(x_{i}-j):i\in\mathbb{Z}_{n}\bigg\},
 \end{equation}
-we simply say $P \equiv Q$. All congruence relations in this paper are modulo the set prescribed above.
-\end{definition}
-
+we simply write $P \equiv Q$.
+\end{defn}
+ Unless otherwise stated, all congruence relations in this paper are prescribed modulo the ideal of polynomials generated by members of the set
+\[
+\bigg\{\prod_{j\in\mathbb{Z}_{n}}(x_{i}-j):i\in\mathbb{Z}_{n}\bigg\}
+\]
 \begin{proposition}[Certificate of Grace]\label{prop:polynomial-grace-certificate}
   %\lean{}
   %\leanok
@@ -281,40 +294,73 @@ Let $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$. The functional
 directed graph $G_f$ prescribed by $f$ is graceful if and only if $P_f(\mathbf{x}) \; \not\equiv \; 0$.
 \end{proposition}
 \begin{proof}
-Observe that the vertex Vandermonde factor $V_f(\mathbf{x})$ is of degree exactly $n-1$ in each variable and therefore equal
+Observe that the vertex Vandermonde factor $V(\mathbf{x})$ is of degree exactly $n-1$ in each variable and therefore equal
 to its remainder, i.e.,
 \begin{equation}\label{eq:Vf}
-V_{f}(\mathbf{x})=\sum_{\theta\in\text{S}_{n}}\text{sgn}(\theta)\prod_{i\in\mathbb{Z}_{n}}(x_{i})^{\theta(i)}=\bigg(\prod_{v\in\mathbb{Z}_{n}}v!\bigg)\sum_{\theta\in\text{S}_{n}}\text{sgn}(\theta)\prod_{i\in\mathbb{Z}_{n}}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{\theta(i)\}}\bigg(\frac{x_{i}-j_{i}}{\theta(i)-j_{i}}\bigg)\right),
+V(\mathbf{x})=\sum_{\theta\in\text{S}_{n}}\text{sgn}(\theta)\prod_{i\in\mathbb{Z}_{n}}(x_{i})^{\theta(i)}=\prod_{v\in\mathbb{Z}_{n}}v!\;\sum_{\theta\in\text{S}_{n}}\text{sgn}(\theta)\prod_{\begin{array}{c}
+\substack{i\in\mathbb{Z}_{n}\\
+j_{i}\in\mathbb{Z}_{n}\backslash\{\theta(i)\}
+}
+\end{array}}\left(\frac{x_{i}-j_{i}}{\theta(i)-j_{i}}\right),
 \end{equation}
-where
+where 
 \begin{equation}
 \text{sgn}(\theta):=\prod_{0\le u<v<n}\left(\frac{\theta(v)-\theta(u)}{v-u}\right),\quad\forall\,\theta\in\text{S}_{n}.
 \end{equation}
 The induced edge label Vandermonde factor $E_f(\mathbf{x})$
 is of degree $>n-1$ in some of its variables. Therefore, by Proposition  \ref{prop:multivariate-quotient-remainder}, we have
-\[
-E_{f}(\mathbf{x})=\sum_{l\in\mathbb{Z}_{m}}q_{l}(\mathbf{x})\prod_{k\in\mathbb{Z}_{n}}(x_{l}-k)+
-\]
 \begin{equation}\label{eq:Ef}
-\sum_{g\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}}\,\prod_{0\le u<v<n}\left(\big(gf(v)-g(v)\big)^{2}-\big(gf(u)-g(u)\big)^{2}\right)\prod_{i\in\mathbb{Z}_{n}}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{g(i)\}}\bigg(\frac{x_{i}-j_{i}}{g(i)-j_{i}}\bigg)\right).
+E_{f}(\mathbf{x})=\sum_{l\in\mathbb{Z}_{m}}q_{l}(\mathbf{x})\prod_{k\in\mathbb{Z}_{n}}(x_{l}-k)+\sum_{g\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}}\,\prod_{0\le u<v<n}\left(\big(gf(v)-g(v)\big)^{2}-\big(gf(u)-g(u)\big)^{2}\right)\prod_{\begin{array}{c}
+\substack{i\in\mathbb{Z}_{n}\\
+j_{i}\in\mathbb{Z}_{n}\backslash\{g(i)\}
+}
+\end{array}}\left(\frac{x_{i}-j_{i}}{g(i)-j_{i}}\right).
 \end{equation}
-Observe that by the expansions in \ref{eq:Vf} and \ref{eq:Ef},
+Observe that by the expansions in \ref{eq:Vf} and \ref{eq:Ef}, 
 \[
-P_f(\mathbf{x})=\sum_{l\in\mathbb{Z}_{m}}q_{l}(\mathbf{x})V_{f}(\mathbf{x})\prod_{k\in\mathbb{Z}_{n}}(x_{l}-k)+
+P_f(\mathbf{x})=\sum_{l\in\mathbb{Z}_{m}}q_{l}(\mathbf{x})V(\mathbf{x})\prod_{k\in\mathbb{Z}_{n}}(x_{l}-k)+
 \]
 \[
-\left(\prod_{v\in\mathbb{Z}_{n}}v!\sum_{\theta\in\text{S}_{n}}\text{sgn}(\theta)\prod_{i\in\mathbb{Z}_{n}}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{\theta(i)\}}\bigg(\frac{x_{i}-j_{i}}{\theta(i)-j_{i}}\bigg)\right)\right)\left(\sum_{g\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}}\prod_{0\le u<v<n}\bigg(\big(gf(v)-g(v)\big)^{2}-\big(gf(u)-g(u)\big)^{2}\bigg)\prod_{i\in\mathbb{Z}_{n}}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{g(i)\}}\frac{x_{i}-j_{i}}{g(i)-j_{i}}\right)\right).
+\left(\prod_{v\in\mathbb{Z}_{n}}v!\sum_{\theta\in\text{S}_{n}}\text{sgn}(\theta)\prod_{\begin{array}{c}
+\substack{i\in\mathbb{Z}_{n}\\
+j_{i}\in\mathbb{Z}_{n}\backslash\{\theta(i)\}
+}
+\end{array}}\left(\frac{x_{i}-j_{i}}{\theta(i)-j_{i}}\right)\right)\left(\sum_{g\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}}\prod_{0\le u<v<n}\bigg(\big(gf(v)-g(v)\big)^{2}-\big(gf(u)-g(u)\big)^{2}\bigg)\prod_{\begin{array}{c}
+\substack{i\in\mathbb{Z}_{n}\\
+j_{i}\in\mathbb{Z}_{n}\backslash\{g(i)\}
+}
+\end{array}}\left(\frac{x_{i}-j_{i}}{g(i)-j_{i}}\right)\right).
 \]
 is congruent to
 \begin{equation} \label{eq:graceful-evaluation}
-\prod_{v\in\mathbb{Z}_{n}}\left(v!\right)^{2}\frac{\left(n-1+v\right)!}{\left(2v\right)!}\sum_{G_{\sigma f\sigma^{-1}}\in\text{GrL}(G_{f})}\text{sgn}(\left|\sigma f\sigma^{-1}-\text{id}\right|\circ\sigma)\prod_{i\in\mathbb{Z}_{n}}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{\sigma(i)\}}\bigg(\frac{x_{i}-j_{i}}{\sigma(i)-j_{i}}\bigg)\right),
+\prod_{v\in\mathbb{Z}_{n}}\left(v!\right)^{2}\frac{\left(n-1+v\right)!}{\left(2v\right)!}\sum_{\begin{array}{c}
+\substack{\sigma\in\text{S}_{n}\\
+\gamma=\left|\sigma f\sigma^{-1}-\text{id}\right|\in\text{S}_{n}
+}
+\end{array}}\text{sgn}(\gamma\sigma)\prod_{\begin{array}{c}
+\substack{i\in\mathbb{Z}_{n}\\
+j_{i}\in\mathbb{Z}_{n}\backslash\{\sigma(i)\}
+}
+\end{array}}\left(\frac{x_{i}-j_{i}}{\sigma(i)-j_{i}}\right), 
 \end{equation}
 where the permutation $\gamma$ denotes the induced edge label permutation associated with a graceful relabeling $G_{\sigma f\sigma^{-1}}$ of $G_f$.
 The congruence above stems from the congruence identity
 \[
-\prod_{i\in\mathbb{Z}_{n}}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{\theta(i)\}}\frac{x_{i}-j_{i}}{\theta(i)-j_{i}}\right)\prod_{i\in\mathbb{Z}_{n}}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{g(i)\}}\frac{x_{i}-j_{i}}{g(i)-j_{i}}\right)\equiv\begin{cases}
+\prod_{\begin{array}{c}
+\substack{i\in\mathbb{Z}_{n}\\
+j_{i}\in\mathbb{Z}_{n}\backslash\{\theta(i)\}
+}
+\end{array}}\left(\frac{x_{i}-j_{i}}{\theta(i)-j_{i}}\right)\prod_{\begin{array}{c}
+\substack{i\in\mathbb{Z}_{n}\\
+j_{i}\in\mathbb{Z}_{n}\backslash\{g(i)\}
+}
+\end{array}}\left(\frac{x_{i}-j_{i}}{g(i)-j_{i}}\right)\equiv\begin{cases}
 \begin{array}{cc}
-\prod_{i\in\mathbb{Z}_{n}}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{\theta(i)\}}\frac{x_{i}-j_{i}}{\theta(i)-j_{i}}\right) & \text{ if }\theta=g\\
+\underset{\begin{array}{c}
+\substack{i\in\mathbb{Z}_{n}\\
+j_{i}\in\mathbb{Z}_{n}\backslash\{\theta(i)\}
+}
+\end{array}}{\prod}\left(\frac{x_{i}-j_{i}}{\theta(i)-j_{i}}\right) & \text{ if }\theta=g\\
 \\0 & \text{otherwise}
 \end{array} & \forall\,(\theta,g)\in\text{S}_{n}\times\mathbb{Z}_{n}^{\mathbb{Z}_{n}}\end{cases}
 \]
@@ -324,17 +370,44 @@ and a graceful labeling necessitates the integer coefficient
 \]
 thus establishing the desired claim.
 \end{proof}
+\begin{example} We present an example of a path on 5 vertices. This is known to be graceful, so we expect a non-zero remainder.
+\ \\
+\begin{center}   
+\resizebox{!}{3em}{
+\begin{tikzpicture}[>={Stealth[round]}, node distance=2cm and 1cm, every node/.style={circle, draw, minimum size=1cm}]
+    % Define vertices
+    \node (v0) at (0, 0) {0};
+    \node (v1) at (3, 0) {1};
+    \node (v2) at (6, 0) {2};
+    \node (v3) at (9, 0) {3};
+    \node (v4) at (12, 0) {4};
+    
+    % Draw edges
+    \draw [->] (v1) to (v0); % Edge 1 -> 0
+    \draw [->] (v2) to (v1); % Edge 2 -> 1
+    \draw [->] (v3) to (v2); % Edge 3 -> 2
+    \draw [->] (v4) to (v3); % Edge 4 -> 3
+    \draw[->] (v0) edge[loop above] (v0); % Self-loop at 0
+\end{tikzpicture}
+}
+\end{center}
+Run the SageMath script \texttt{ex1325.sage} to verify.
+\end{example}
 \begin{proposition}[Complementary Labeling Symmetry]\label{prop:complementary-labeling-Symmetry}
 %\lean{}
   %\leanok
   %\uses{defn:graceful-functional-graphs, defn:graceful-functional-graphs-set, prop:multivariate-quotient-remainder, defn:polynomial-grace-definition, defn:polynomial-congruence, prop:polynomial-grace-certificate, prop:complementary-labeling-Symmetry}
-Let $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ and
-\[
-\overline{P}_{f}(\mathbf{x}):=
-\]
+Let $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ and the remainder of $P_f$ be
 \begin{equation}
-\prod_{v\in\mathbb{Z}_{n}}\left(v!\right)^{2}\frac{\left(n-1+v\right)!}{\left(2v\right)!}\sum_{\begin{array}{c}
-G_{\sigma f\sigma^{-1}}\in\text{GrL}(G_{f})\end{array}}\text{sgn}(\left|\sigma f\sigma^{-1}-\text{id}\right|\circ\sigma)\prod_{i\in\mathbb{Z}_{n}}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{\sigma(i)\}}\bigg(\frac{x_{i}-j_{i}}{\sigma(i)-j_{i}}\bigg)\right)
+\overline{P}_f(\mathbf{x}):=\prod_{v\in\mathbb{Z}_{n}}\left(v!\right)^{2}\frac{\left(n-1+v\right)!}{\left(2v\right)!}\sum_{\begin{array}{c}
+\substack{\sigma\in\text{S}_{n}\\
+\gamma=\left|\sigma f\sigma^{-1}-\text{id}\right|\in\text{S}_{n}
+}
+\end{array}}\text{sgn}(\gamma\sigma)\prod_{\begin{array}{c}
+\substack{i\in\mathbb{Z}_{n}\\
+j_{i}\in\mathbb{Z}_{n}\backslash\{\sigma(i)\}
+}
+\end{array}}\left(\frac{x_{i}-j_{i}}{\sigma(i)-j_{i}}\right). 
 \end{equation}
 The complementary labeling map $x_{i}\mapsto x_{n-1-i},$ for all $i\in \mathbb{Z}_n$,
 fixes $\overline{P}_f$ up to sign.
@@ -354,30 +427,62 @@ on $P_{f}$ yields the congruence identity
 P_{f}(\mathbf{x}_{\varphi})\equiv \overline{P}_f(\mathbf{x}_{\varphi}).
 \]
 Hence,
-\[
-\begin{array}{ccc}
-\overline{P}_{f}({\bf x}_{\varphi}) & = & \prod_{v}\bigg(\left(v!\right)^{2}\frac{\left(n-1+v\right)!}{\left(2v\right)!}\bigg)\sum_{G_{\sigma f\sigma^{-1}}\in\text{GrL}(G_{f})}\text{sgn}(\left|\sigma f\sigma^{-1}-\text{id}\right|\sigma)\prod_{i}\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{\sigma(i)\}}\bigg(\frac{x_{\varphi(i)}-j_{i}}{\sigma(i)-j_{i}}\bigg),\\
-\\ & = & \text{sgn}(\varphi)\prod_{v}\bigg(\left(v!\right)^{2}\frac{\left(n-1+v\right)!}{\left(2v\right)!}\bigg)\sum_{G_{\sigma f\sigma^{-1}}\in\text{GrL}(G_{f})}\text{sgn}(\left|\sigma f\sigma^{-1}-\text{id}\right|\sigma\varphi^{-1})\prod_{i}\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{\sigma(i)\}}\bigg(\frac{x_{u}-v_{u}}{\sigma\varphi^{-1}(u)-v_{u}}\bigg).
-\end{array}
-\]
+\begin{align*}
+    \overline{P}_f({\bf x}_{\varphi})	& =\prod_{v\in\mathbb{Z}_{n}}\bigg(\left(v!\right)^{2}\frac{\left(n-1+v\right)!}{\left(2v\right)!}\bigg)\sum_{\substack{\sigma\in\text{S}_{n}\\
+\gamma=\left|\sigma f\sigma^{-1}-\text{id}\right|\in\text{S}_{n}
+}
+}\text{sgn}(\gamma\sigma)\prod_{\substack{i\in\mathbb{Z}_{n}\\
+j_{i}\in\mathbb{Z}_{n}\backslash\{\sigma(i)\}
+}
+}\bigg(\frac{x_{\varphi(i)}-j_{i}}{\sigma(i)-j_{i}}\bigg),\\
+	&=\text{sgn}(\varphi)\prod_{v\in\mathbb{Z}_{n}}\bigg(\left(v!\right)^{2}\frac{\left(n-1+v\right)!}{\left(2v\right)!}\bigg)\sum_{\substack{\sigma\in\text{S}_{n}\\
+\gamma=\left|\sigma f\sigma^{-1}-\text{id}\right|\in\text{S}_{n}
+}
+}\text{sgn}(\gamma\sigma\varphi^{-1})\prod_{\substack{u\in\mathbb{Z}_{n}\\
+v_{u}\in\mathbb{Z}_{n}\backslash\{\sigma\varphi^{-1}(u)\}
+}
+}\bigg(\frac{x_{u}-v_{u}}{\sigma\varphi^{-1}(u)-v_{u}}\bigg).
+\end{align*}
 If $\varphi=n-1-\text{id}$, then,
-by the complementary labeling symmetry, we have
+by the complementary labeling symmetry, we have 
 \[
 G_{\sigma f\sigma^{-1}}\in\text{GrL}\left(G_{f}\right)\Longleftrightarrow G_{\sigma\varphi^{-1}f(\sigma\varphi^{-1})^{-1}}\in\text{GrL}\left(G_{f}\right)
 \]
 Let $\mathfrak{G}$ denote the subrgoup of $\text{S}_n$ whose members are $\big\{\text{id},\ \varphi\big\}$. We write
 \[
-\overline{P}_f(\mathbf{x}_\varphi)=\prod_{v\in\mathbb{Z}_{n}}\bigg(\left(v!\right)^{2}\frac{\left(n-1+v\right)!}{\left(2v\right)!}\bigg)\sum_{\sigma\in\text{S}_{n}/\mathfrak{G},G_{\sigma f\sigma^{-1}}\in\text{GrL}(Gf)}\text{sgn}(\left|\sigma f\sigma^{-1}-\text{id}\right|\sigma)\times
+\overline{P}_f(\mathbf{x}_\varphi)=
 \]
 \[
-\left(\text{sgn}(\varphi^{-1})\prod_{u\in\mathbb{Z}_{n}}\prod_{v_{u}\in\mathbb{Z}_{n}\backslash\{\sigma(u)\}}\bigg(\frac{x_{u}-v_{u}}{\sigma(u)-v_{u}}\bigg)+\prod_{u\in\mathbb{Z}_{n}}\prod_{v_{u}\in\mathbb{Z}_{n}\backslash\{\sigma\varphi^{-1}(u)\}}\bigg(\frac{x_{u}-v_{u}}{\sigma\varphi^{-1}(u)-v_{u}}\bigg)\right).
+\prod_{v\in\mathbb{Z}_{n}}\bigg(\left(v!\right)^{2}\frac{\left(n-1+v\right)!}{\left(2v\right)!}\bigg)\sum_{\begin{array}{c}
+\substack{\sigma\in\nicefrac{\text{S}_{n}}{\mathfrak{G}}\\
+\gamma=\left|\sigma f\sigma^{-1}-\text{id}\right|\in\text{S}_{n}
+}
+\end{array}}\text{sgn}(\gamma\sigma)\left(\text{sgn}(\varphi^{-1})\prod_{\substack{u\in\mathbb{Z}_{n}\\
+v_{u}\in\mathbb{Z}_{n}\backslash\{\sigma(u)\}
+}
+}\bigg(\frac{x_{u}-v_{u}}{\sigma(u)-v_{u}}\bigg)+\prod_{\substack{u\in\mathbb{Z}_{n}\\
+v_{u}\in\mathbb{Z}_{n}\backslash\{\sigma\varphi^{-1}(u)\}
+}
+}\bigg(\frac{x_{u}-v_{u}}{\sigma\varphi^{-1}(u)-v_{u}}\bigg)\right).
 \]
-Similarly,
+Similarly, 
 \[
-\overline{P}_f(\mathbf{x})=\prod_{v\in\mathbb{Z}_{n}}\bigg(\left(v!\right)^{2}\frac{\left(n-1+v\right)!}{\left(2v\right)!}\bigg)\sum_{\sigma\in\text{S}_{n}/\mathfrak{G},G_{\sigma f\sigma^{-1}}\in\text{GrL}(Gf)}\text{sgn}(\left|\sigma f\sigma^{-1}-\text{id}\right|\sigma)
+\overline{P}_f(\mathbf{x})=
 \]
 \[
-\left(\prod_{u\in\mathbb{Z}_{n}}\prod_{v_{u}\in\mathbb{Z}_{n}\backslash\{\sigma(u)\}}\bigg(\frac{x_{u}-v_{u}}{\sigma(u)-v_{u}}\bigg)+\text{sgn}(\varphi^{-1})\prod_{u\in\mathbb{Z}_{n}}\prod_{v_{u}\in\mathbb{Z}_{n}\backslash\{\sigma\varphi^{-1}(u)\}}\bigg(\frac{x_{u}-v_{u}}{\sigma\varphi^{-1}(u)-v_{u}}\bigg)\right).
+\prod_{v\in\mathbb{Z}_{n}}\bigg(\left(v!\right)^{2}\frac{\left(n-1+v\right)!}{\left(2v\right)!}\bigg)\sum_{\begin{array}{c}
+\substack{\sigma\in\nicefrac{\text{S}_{n}}{\mathfrak{G}}\\
+\gamma=\left|\sigma f\sigma^{-1}-\text{id}\right|\in\text{S}_{n}
+}
+\end{array}}\text{sgn}(\gamma\sigma)\left(\prod_{\begin{array}{c}
+\substack{i\in\mathbb{Z}_{n}\\
+j_{i}\in\mathbb{Z}_{n}\backslash\{\sigma(i)\}
+}
+\end{array}}\bigg(\frac{x_{i}-j_{i}}{\sigma(i)-j_{i}}\bigg)+\text{sgn}(\varphi^{-1})\prod_{\begin{array}{c}
+\substack{i\in\mathbb{Z}_{n}\\
+j_{i}\in\mathbb{Z}_{n}\backslash\{\sigma\varphi^{-1}(i)\}
+}
+\end{array}}\bigg(\frac{x_{i}-j_{i}}{\sigma\varphi^{-1}(i)-j_{i}}\bigg)\right).
 \]
 We conclude that the complementary labeling symmetry yields the equality
 \[
@@ -385,12 +490,37 @@ We conclude that the complementary labeling symmetry yields the equality
 \]
 thus establishing the desired claim.
 \end{proof}
+
+\begin{example} We present an example of a path on 5 vertices.
+\ \\
+\begin{center}   
+\resizebox{!}{3em}{
+\begin{tikzpicture}[>={Stealth[round]}, node distance=2cm and 1cm, every node/.style={circle, draw, minimum size=1cm}]
+    % Define vertices
+    \node (v0) at (0, 0) {0};
+    \node (v1) at (3, 0) {1};
+    \node (v2) at (6, 0) {2};
+    \node (v3) at (9, 0) {3};
+    \node (v4) at (12, 0) {4};
+    
+    % Draw edges
+    \draw [->] (v1) to (v0); % Edge 1 -> 0
+    \draw [->] (v2) to (v1); % Edge 2 -> 1
+    \draw [->] (v3) to (v2); % Edge 3 -> 2
+    \draw [->] (v4) to (v3); % Edge 4 -> 3
+    \draw[->] (v0) edge[loop above] (v0); % Self-loop at 0
+\end{tikzpicture}
+}
+\end{center}
+Run the SageMath script \texttt{ex1328.sage} to verify.
+\end{example}
+
 \begin{lemma}[Variable Dependency] \label{lem:variable-dependency}
   %\lean{}
   %\leanok
   %\uses{prop:multivariate-quotient-remainder}
 Let $P\in\mathbb{Q}\left[x_{0},\ldots,x_{n-1}\right]$
-and $S\subsetneq\mathbb{Z}_{n}$. If
+and $S\subsetneq\mathbb{Z}_{n}$. If 
 \begin{equation}
 P(\mathbf{x})=\sum_{g\in\mathbb{Z}_{n}^{S}}c_{g}\,\prod_{i\in S}(x_{i})^{g(i)},
 \end{equation}
@@ -408,21 +538,29 @@ where $\alpha_k, a_g\in \mathbb{C}$ for all $k\in \mathbb{Z}_n$ such that $n=\le
 in its variables. Thus by Proposition \ref{prop:multivariate-quotient-remainder}, the polynomial $P({\bf x})$
 is equal to its remainder, i.e.,
 \begin{equation}
-P(\mathbf{x})\;=\;\sum_{g\in\mathbb{Z}_{n}^{S}}c_{g}\,\prod_{i\in S}(x_{i})^{g(i)}\;=\;\sum_{g\in\mathbb{Z}_{n}^{S}}P(g)\prod_{i\in S}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\left\{ g(i)\right\} }\bigg(\frac{x_{i}-\alpha_{j_{i}}}{\alpha_{g(i)}-\alpha_{j_{i}}}\bigg)\right).
+P(\mathbf{x})\;=\;\sum_{g\in\mathbb{Z}_{n}^{S}}c_{g}\,\prod_{i\in S}(x_{i})^{g(i)}\;=\;\sum_{g\in\mathbb{Z}_{n}^{S}}P(g)\prod_{\begin{array}{c}
+\substack{i\in S\\
+j_{i}\in\mathbb{Z}_{n}\backslash\left\{ g(i)\right\} 
+}
+\end{array}}\left(\frac{x_{i}-\alpha_{j_{i}}}{\alpha_{g(i)}-\alpha_{j_{i}}}\right).
 \end{equation}
  The remainder of $(P({\bf x}))^m$ is obtained by repeatedly replacing each occurrence
 of $(x_{i})^{n}$ with $(x_{i})^{n}-\underset{k\in\mathbb{Z}_{n}}{\prod}(x_{i}-\alpha_{k})$, followed by expanding the resulting polynomials, starting from the
-expanded form of
+expanded form of 
 \begin{equation}
 \bigg(\sum_{g\in\mathbb{Z}_{n}^{S}}c_{g}\,\prod_{i\in S}(x_{i})^{g(i)}\bigg)^{m},
 \end{equation}
 until we obtain a polynomial of degree at most $n-1$ in each variable.
 The transformation never introduces a variable indexed by a member
-of the complement of $S$. We obtain that
+of the complement of $S$. We obtain that 
 \[
-\bigg(\sum_{g\in\mathbb{Z}_{n}^{S}}c_{g}\,\prod_{i\in S}(x_{i})^{g(i)}\bigg)^{m}=\sum_{j\in\mathbb{Z}_{m}}q_{j}(\mathbf{x})\prod_{k\in\mathbb{Z}_{n}}(x_{j}-\alpha_{k})+\sum_{g\in\mathbb{Z}_{n}^{S}}\big(P(g)\big)^{m}\prod_{i\in S}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\left\{ g(i)\right\} }\bigg(\frac{x_{i}-\alpha_{j_{i}}}{\alpha_{g(i)}-\alpha_{j_{i}}}\bigg)\right)
+\bigg(\sum_{g\in\mathbb{Z}_{n}^{S}}c_{g}\,\prod_{i\in S}(x_{i})^{g(i)}\bigg)^{m}=\sum_{j\in\mathbb{Z}_{m}}q_{j}(\mathbf{x})\prod_{k\in\mathbb{Z}_{n}}(x_{j}-\alpha_{k})+\sum_{g\in\mathbb{Z}_{n}^{S}}\big(P(g)\big)^{m}\prod_{\begin{array}{c}
+\substack{i\in S\\
+j_{i}\in\mathbb{Z}_{n}\backslash\left\{ g(i)\right\} 
+}
+\end{array}}\left(\frac{x_{i}-\alpha_{j_{i}}}{\alpha_{g(i)}-\alpha_{j_{i}}}\right)
 \]
-by which it follows that
+by which it follows that 
 \begin{equation}
 \bigg(\sum_{g\in\mathbb{Z}_{n}^{S}}c_{g}\,\prod_{i\in S}(x_{i})^{g(i)}\bigg)^{m}=\sum_{j\in\mathbb{Z}_{m}}q_{j}(\mathbf{x})\prod_{k\in\mathbb{Z}_{n}}(x_{j}-\alpha_{k})+\sum_{g\in\mathbb{Z}_{n}^{S}}a_{g}\prod_{i\in S}(x_{i})^{g(i)},
 \end{equation}
@@ -434,13 +572,17 @@ as claimed.
   %\leanok
   %\uses{prop:multivariate-quotient-remainder}
  Let $P\in\mathbb{Q}[x_{0},\ldots,x_{n-1}]$ be such that it is not identically
-constant. If
+constant. If 
 \begin{equation}
-P(\mathbf{x})\;=\;\sum_{\sigma\in\text{S}_{n}}a_{\sigma}\prod_{i\in\mathbb{Z}_{n}}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{\sigma(i)\}}\bigg(\frac{x_{i}-j_{i}}{\sigma(i)-j_{i}}\bigg)\right)
+P(\mathbf{x})\;=\;\sum_{\sigma\in\text{S}_{n}}a_{\sigma}\prod_{\begin{array}{c}
+\substack{i\in\mathbb{Z}_{n}\\
+j_{i}\in\mathbb{Z}_{n}\backslash\{\sigma(i)\}
+}
+\end{array}}\left(\frac{x_{i}-j_{i}}{\sigma(i)-j_{i}}\right),
 \end{equation}
 then there exist a minimal non-empty set $\mathcal{M}_{P}\subset\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$
 subject to $\left|f^{-1}\left(\left\{ 0\right\} \right)\right|\le1$
-for all $f\in\mathcal{M}_{P}$ such that
+for all $f\in\mathcal{M}_{P}$ such that 
 \begin{equation}
 P(\mathbf{x})=\sum_{f\in\mathcal{M}_{P}}c_{f}\prod_{i\in\mathbb{Z}_{n}}x_{i}^{f\left(i\right)},
 \end{equation}
@@ -452,21 +594,28 @@ where $c_{f}\in\mathbb{Q}\setminus\{0\}$.
 a multiple of at least $n-1$ distinct variables. Consider a Lagrange
 basis polynomial associated with an arbitrary $\sigma\in\text{S}_{n}$:
 \[
-L_{\sigma}({\bf x})=\prod_{i\in\mathbb{Z}_{n}}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\setminus\{\sigma(i)\}}\bigg(\frac{x_{i}-j_{i}}{\sigma(i)-j_{i}}\bigg)\right)\;=\;\prod_{i\in\mathbb{Z}_{n}\setminus\{\sigma^{-1}(0)\}}\left(\prod_{j_{i}\in\mathbb{Z}_{n}\backslash\{\sigma(i)\}}\bigg(\frac{x_{i}-j_{i}}{\sigma\left(i\right)-j_{i}}\bigg)\right)\prod_{j_{\sigma^{-1}\left(0\right)}\in\mathbb{Z}_{n}\backslash\left\{ 0\right\} }\left(\frac{x_{\sigma^{-1}\left(0\right)}-j_{\sigma^{-1}\left(0\right)}}{0-j_{\sigma^{-1}\left(0\right)}}\right).
+L_{\sigma}({\bf x})=\prod_{\substack{i\in\mathbb{Z}_{n}\\
+j_{i}\in\mathbb{Z}_{n}\setminus\{\sigma(i)\}
+}
+}\bigg(\frac{x_{i}-j_{i}}{\sigma(i)-j_{i}}\bigg)\;=\;\prod_{\begin{array}{c}
+\substack{i\in\mathbb{Z}_{n}\setminus\{\sigma^{-1}(0)\}\\
+j_{i}\in\mathbb{Z}_{n}\backslash\{\sigma(i)\}
+}
+\end{array}}\left(\frac{x_{i}-j_{i}}{\sigma\left(i\right)-j_{i}}\right)\prod_{j_{\sigma^{-1}\left(0\right)}\in\mathbb{Z}_{n}\backslash\left\{ 0\right\} }\left(\frac{x_{\sigma^{-1}\left(0\right)}-j_{\sigma^{-1}\left(0\right)}}{0-j_{\sigma^{-1}\left(0\right)}}\right).
 \]
 On the right-hand side of the second equal sign immediately above,
 the univariate polynomial in $x_{\sigma^{-1}(0)}$ encompassed within the scope of the second $\Pi$
 indexed by $j_{\sigma^{-1}\left(0\right)}\in\mathbb{Z}_{n}\backslash\left\{ 0\right\} $
 has (in its expanded form) a non-vanishing constant term equal to
-one. However, the constant term vanishes within the expanded form
-of each univariate factors
+one. However, the constant term vanishes  within the expanded form
+of each univariate factor
 \[
 \underset{j_{i}\in\mathbb{Z}_{n}\setminus\left\{ \sigma\left(i\right)\right\} }{\prod}\left(\frac{x_{i}-j_{i}}{\sigma\left(i\right)-j_{i}}\right)
 \]
 encompassed within the scope of the first $\Pi$ indexed by $i\in\mathbb{Z}_{n}\setminus\left\{ \sigma^{-1}\left(0\right)\right\}$. Indeed, we have
 \[
 L_{\sigma}({\bf x})=\underbrace{\prod_{\substack{i\in\mathbb{Z}_{n}\setminus\left\{ \sigma^{-1}\left(0\right)\right\} \\
-j_{i}\in\mathbb{Z}_{n}\setminus\left\{ \sigma\left(i\right)\right\}
+j_{i}\in\mathbb{Z}_{n}\setminus\left\{ \sigma\left(i\right)\right\} 
 }
 }\bigg(\frac{x_{i}-j_{i}}{\sigma\left(i\right)-j_{i}}\bigg)}_{\text{does not feature the variable }x_{\sigma^{-1}\left(0\right)}}\:\bigg(\frac{(x_{\sigma^{-1}\left(0\right)})^{n-1}+\ldots+(-1)^{n-1}(n-1)!}{(-1)^{n-1}(n-1)!}\bigg).
 \]
@@ -520,7 +669,7 @@ Note that there is a bijection
 x_{i}\mapsto(x_{f(i)}-x_{i})^{2},\quad\forall\:i\in\mathbb{Z}_{n}.
 \end{equation} Hence, the transposition $\tau$ of the leaf nodes induces a transposition
 $\tau$ of the corresponding leaf edges outgoing from the said leaf
-nodes.
+nodes. 
 More precisely, the maps
 \[
 \left(\begin{array}{ccccc}
@@ -557,14 +706,14 @@ thus establishing the desired claim.
 
 \end{proof}
 
-\begin{proposition}[Composition Inequality]\label{prop:composition-lemma-ineq}
+\begin{prop}[Composition Inequality]\label{prop:composition-lemma-ineq}
   %\lean{}
   %\leanok
   %\uses{defn:graceful-functional-graphs, defn:graceful-functional-graphs-set, prop:multivariate-quotient-remainder, defn:polynomial-grace-definition, defn:polynomial-congruence, prop:polynomial-grace-certificate}
 Consider an arbitrary $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ subject to the fixed point condition
 $\left|f^{\left(n-1\right)}\left(\mathbb{Z}_{n}\right)\right|=1$. The following statements are equivalent:
 \begin{enumerate}
-    \item
+    \item 
     \[
     \max_{\sigma\in\text{S}_{n}}\left|\left\{ \left|\sigma f^{(2)}\sigma^{-1}(i)-i\right|:i\in\mathbb{Z}_{n}\right\} \right|\le\max_{\sigma\in\text{S}_{n}}\left|\left\{ \left|\sigma f\sigma^{-1}(i)-i\right|:i\in\mathbb{Z}_{n}\right\} \right|.
     \]
@@ -572,12 +721,12 @@ $\left|f^{\left(n-1\right)}\left(\mathbb{Z}_{n}\right)\right|=1$. The following 
     \[
     P_{f^{(2)}} ({\bf x}) \not\equiv 0  \implies  P_{f} ({\bf x}) \not\equiv 0.
     \]
-    \item
+    \item 
     \[
     \text{GrL}(G_f) \neq \varnothing
     \]
-\end{enumerate}
-\end{proposition}
+\end{enumerate}    
+\end{prop}
 \begin{proof}
 If $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ is identically constant,
 then $G_{f}$ is graceful. We see this from the fact that the functional
@@ -585,8 +734,8 @@ digraph of the identically zero function is gracefully labeled and the fact that
 functional digraphs of identically constant functions are all isomorphic. It follows
 that all functional directed graphs having diameter less than $3$ are graceful. Consequently,
 all claims hold for all functional digraphs of diameter less than $3$. We now turn our attention
-to functional trees of diameter greater or equal to $3$.
-It follows by definition
+to functional trees of diameter greater or equal to $3$. 
+It follows by definition 
 \begin{equation}
 n=\max_{\sigma\in\text{S}_{n}}\left|\left\{ \left|\sigma f\sigma^{-1}(i)-i\right|:i\in\mathbb{Z}_{n}\right\} \right| \iff P_{f}({\bf x})\not\equiv0 \iff \text{GrL}(G_f) \neq \varnothing.
 \end{equation}
@@ -602,31 +751,31 @@ indeed implies the inequality
 \end{equation}
 We now establish the forward claim by contradiction. Assume for the
 sake of establishing a contradiction that for some contractive map
-$f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ we have
+$f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ we have 
 \begin{equation}
 n>\max_{\sigma\in\text{S}_{n}}\left|\left\{ |\sigma f^{(2)}\sigma^{-1}(i)-i|:i\in\mathbb{Z}_{n}\right\} \right|,
 \end{equation}
 for we know by the number of edges being equal to $n$ that it is impossible
- that
+ that 
 \begin{equation}
 n<\max_{\sigma\in\text{S}_{n}}\left|\left\{ |\sigma f^{(2)}\sigma^{-1}(i)-i|:i\in\mathbb{Z}_{n}\right\} \right|.
 \end{equation}
 Note that the range of $f$ is a proper subset of $\mathbb{Z}_{n}$.
 By the premise that $f$ is contractive, it follows that $f^{(\left\lceil 2^{\text{lg}(n-1)}\right\rceil )}$
-is identically constant and thus
+is identically constant and thus 
 \begin{equation}
 n=\max_{\sigma\in\text{S}_{n}}\left|\left\{ |\sigma f^{(\left\lceil 2^{\text{lg}(n-1)}\right\rceil )}\sigma^{-1}(i)-i|:i\in\mathbb{Z}_{n}\right\} \right|,
 \end{equation}
 where lg denotes the logarithm base $2$. Consequently there must
-be some integer $0\le\kappa<\text{lg}(n-1)$ such that
+be some integer $0\le\kappa<\text{lg}(n-1)$ such that 
 \begin{equation}
 \max_{\sigma\in\text{S}_{n}}\left|\left\{ |\sigma f^{(\left\lceil 2^{\kappa}\right\rceil )}\sigma^{-1}(i)-i|:i\in\mathbb{Z}_{n}\right\} \right|>\max_{\sigma\in\text{S}_{n}}\left|\left\{ |\sigma f^{(\left\lceil 2^{\kappa-1}\right\rceil )}\sigma^{-1}(i)-i|:i\in\mathbb{Z}_{n}\right\} \right|.
 \end{equation}
 This contradicts the assertion of statement (i), thereby
-establishing the backward claim.
+establishing the backward claim. 
 The exact same reasoning as above establishes (ii) $\iff$ (iii), for we have
 \begin{equation}
-        P_{f^{\left(\left\lceil 2^{\text{lg}(n-1)}\right\rceil \right)}} ({\bf x}) \not\equiv 0.
+        P_{f^{\left(\left\lceil 2^{\text{lg}(n-1)}\right\rceil \right)}} ({\bf x}) \not\equiv 0. 
 \end{equation}
 \end{proof}
 
@@ -635,14 +784,14 @@ Having assembled together the pieces required to prove our main result, we proce
     %\lean{}
   %\leanok
   %\uses{defn:graceful-functional-graphs, defn:graceful-functional-graphs-set, prop:multivariate-quotient-remainder, defn:polynomial-grace-definition, defn:polynomial-congruence, prop:polynomial-grace-certificate, prop:composition-lemma-ineq}
- For all $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ subject to the contraction
+ For all contractive  $f\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$, i.e., subject to 
 $\left|f^{\left(n-1\right)}\left(\mathbb{Z}_{n}\right)\right|=1$,
 we have
 \begin{equation}\label{eq:composition-lemma}
 \max_{\sigma\in\text{S}_{n}}\left|\left\{ \left|\sigma f^{(2)}\sigma^{-1}(i)-i\right|:i\in\mathbb{Z}_{n}\right\} \right|\le\max_{\sigma\in\text{S}_{n}}\left|\left\{ \left|\sigma f\sigma^{-1}(i)-i\right|:i\in\mathbb{Z}_{n}\right\} \right|.\end{equation}
 \end{lemma}
 \begin{proof}
-Owing to Proposition \ref{prop:composition-lemma-ineq}, we prove the statement by establishing
+Owing to Proposition \ref{prop:composition-lemma-ineq}, we prove the statement by establishing 
 \[
     P_{f^{(2)}} ({\bf x}) \not\equiv 0  \implies  P_{f} ({\bf x}) \not\equiv 0.
 \]
@@ -651,7 +800,7 @@ that the diameter of $G_{f}$ is greater than $2$, we may assume
 without loss of generality that $f^{-1}\left(\{n-1\}\right)=\varnothing$
 and $f^{(2)}(n-1)\ne f(n-1)$. Let the contractive
 map $g\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}$ be devised from $f$ such
-that
+that 
 \begin{equation}
 g\left(i\right)=\begin{cases}
 \begin{array}{cc}
@@ -669,7 +818,7 @@ iterated. More precisely, $f$ is iterated only on the restriction
 $f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)\subset\mathbb{Z}_{n}$.
 Iterating this slight generalization of the composition lemma yields
 that all functional trees are graceful, which in turn implies that the \textit{Composition Lemma} as stated in Lemma \ref{eq:composition-lemma}  holds. For notational convenience,
-we assume without loss of generality that
+we assume without loss of generality that 
 \[
 f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)=\left\{ n-1,\,n-2,\,...,\,n-\left|f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)\right|\right\} \;\text{ and}
 \]
@@ -686,17 +835,17 @@ By construction, the polynomial
 P_{f}\left(\mathbf{x}\right)=\underset{0\le i<j<n}{\prod}\left(x_{j}-x_{i}\right)\times\\
 \underset{\begin{array}{c}
 0\le u<v\le f\left(n-1\right)\\
-t\in\left\{ 0,1\right\}
+t\in\left\{ 0,1\right\} 
 \end{array}}{\prod} & \bigg(x_{f\left(v\right)}-x_{v}+\left(-1\right)^{t}(x_{f\left(u\right)}-x_{u})\bigg)\times\\
 \underset{\begin{array}{c}
 v\in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)\\
 0\le u\le f\left(n-1\right)\\
-t\in\left\{ 0,1\right\}
+t\in\left\{ 0,1\right\} 
 \end{array}}{\prod} & \bigg(x_{f\left(v\right)}-x_{v}+\left(-1\right)^{t}(x_{f\left(u\right)}-x_{u})\bigg)\times\\
 \underset{\begin{array}{c}
 v\in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)\\
 f\left(n-1\right)<u<v\\
-t\in\left\{ 0,1\right\}
+t\in\left\{ 0,1\right\} 
 \end{array}}{\prod} & \bigg(x_{f\left(v\right)}-x_{v}+\left(-1\right)^{t}(x_{f\left(u\right)}-x_{u})\bigg),
 \end{array}
 \end{equation}
@@ -706,17 +855,17 @@ differs only slightly from
  & P_{g}\left(\mathbf{x}\right)=\underset{0\le i<j<n}{\prod}\left(x_{j}-x_{i}\right)\times\\
  & \underset{\begin{array}{c}
 0\le u<v\le f\left(n-1\right)\\
-t\in\left\{ 0,1\right\}
+t\in\left\{ 0,1\right\} 
 \end{array}}{\prod} & \bigg(x_{f\left(v\right)}-x_{v}+\left(-1\right)^{t}(x_{f\left(u\right)}-x_{u})\bigg)\times\\
  & \underset{\begin{array}{c}
 v\in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)\\
 0\le u\le f\left(n-1\right)\\
-t\in\left\{ 0,1\right\}
+t\in\left\{ 0,1\right\} 
 \end{array}}{\prod} & \bigg(x_{f^{\left(2\right)}\left(v\right)}-x_{v}+\left(-1\right)^{t}(x_{f\left(u\right)}-x_{u})\bigg)\times\\
  & \underset{\begin{array}{c}
 v\in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)\\
 f\left(n-1\right)<u<v\\
-t\in\left\{ 0,1\right\}
+t\in\left\{ 0,1\right\} 
 \end{array}}{\prod} & \bigg(x_{f^{\left(2\right)}\left(v\right)}-x_{v}+\left(-1\right)^{t}(x_{f^{\left(2\right)}\left(u\right)}-x_{u})\bigg).
 \end{array}
 \end{equation}
@@ -747,29 +896,71 @@ x_{v}\longrightarrow{\color{red}x_{f\left(v\right)}}
 where the last equality immediately above results from the fact that $f\left(v\right)=f\left(n-1\right)$
 for all $v\in f^{-1}\left(\left\{ f(n-1)\right\} \right)$. Thus
 \[
-P_{g}=\underset{0\le i<j<n}{\prod}\left(x_{j}-x_{i}\right)\times
+\begin{array}{c}
+P_{g} = \underset{0 \le i < j < n}{\prod} \left(x_{j} - x_{i}\right) \times \\[10pt]
+
+\underset{
+    \substack{
+        0 \le u < v \le f\left(n-1\right) \\
+        t \in \left\{ 0, 1 \right\}
+    }
+}{\prod}
+\bigg( 
+    x_{f\left(v\right)} - x_{v} 
+    + \left(-1\right)^{t} 
+    \big(x_{f\left(u\right)} - x_{u}\big) 
+\bigg) \times \\[10pt]
+
+\underset{
+    \substack{
+        v \in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right) \\
+        0 \le u \le f\left(n-1\right) \\
+        t \in \left\{ 0, 1 \right\}
+    }
+}{\prod}
+\bigg(
+    {\color{blue}(}x_{f^{\left(2\right)}\left(n-1\right)} 
+    {\color{blue}- x_{f\left(n-1\right)}}{\color{blue})} 
+    + {\color{red}(x_{f\left(v\right)}} - x_{v}{\color{red})} 
+    + \left(-1\right)^{t} 
+    \big(x_{f\left(u\right)} - x_{u}\big) 
+\bigg) \times \\[10pt]
+
+\underset{
+    \substack{
+        v \in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right) \\
+        f\left(n-1\right) < u < v \\
+        t \in \left\{ 0, 1 \right\}
+    }
+}{\prod}
+\bigg(
+    {\color{blue}(}x_{f^{\left(2\right)}\left(n-1\right)} 
+    {\color{blue}- x_{f\left(n-1\right)}}{\color{blue})} 
+    + {\color{red}(x_{f\left(v\right)}} - x_{v}{\color{red})} 
+    + \left(-1\right)^{t} 
+    \big(
+        {\color{blue}(}x_{f^{\left(2\right)}\left(n-1\right)} 
+        {\color{blue}- x_{f\left(n-1\right)}}{\color{blue})} 
+        + {\color{red}(x_{f\left(u\right)}} - x_{u}{\color{red})} 
+    \big)
+\bigg).
+\end{array}
 \]
-\[
-\prod_{0\le u<v\le f(n-1),t\in\left\{ 0,1\right\} }\bigg(x_{f\left(v\right)}-x_{v}+\left(-1\right)^{t}\big(x_{f\left(u\right)}-x_{u}\big)\bigg)\times
-\]
-\[
-\prod_{0\le u<v\le f(n-1),0\le u\le f\left(n-1\right),t\in\left\{ 0,1\right\} }\bigg({\color{blue}(}x_{f^{\left(2\right)}\left(n-1\right)}{\color{blue}-x_{f\left(n-1\right)}}{\color{blue})}+{\color{red}(x_{f\left(v\right)}}-x_{v}{\color{red})}+\left(-1\right)^{t}\big(x_{f\left(u\right)}-x_{u}\big)\bigg)\times
-\]
-\[
-\prod_{0\le u<v\le f(n-1),f(n-1)<u<v,t\in\left\{ 0,1\right\} }\bigg({\color{blue}(}x_{f^{\left(2\right)}\left(n-1\right)}{\color{blue}-x_{f\left(n-1\right)}}{\color{blue})}+{\color{red}(x_{f\left(v\right)}}-x_{v}{\color{red})}+\left(-1\right)^{t}\big({\color{blue}(}x_{f^{\left(2\right)}\left(n-1\right)}{\color{blue}-x_{f\left(n-1\right)}}{\color{blue})}+{\color{red}(x_{f\left(u\right)}}-x_{u}{\color{red})}\big)\bigg)
-\]
-For notational convenience, we write
-\[
-P_{g}=\prod_{0\le i<j<n}\big(x_{j}-x_{i}\big)\times
-\]
-\[
-\prod_{0\leq u<v\leq f\left(n-1\right)}\left(\left(x_{f(v)}-x_{v}\right)^{2}-\left(x_{f(u)}-x_{u}\right)^{2}\right)\times
-\]
-\[
-\prod_{v\in f^{-1}\left(\{f(n-1)\}\right),0\leq u\leq f(n-1),t\in\{0,1\}}\left({\color{red}b_{u,v,t}}+{\color{blue}a_{f(n-1)}}\right)\times
-\]
+
+For notational convenience, we write 
 \begin{equation}
-\prod_{v\in f^{-1}\left(\{f(n-1)\}\right),f\left(n-1\right)<u<v}\left({\color{red}b_{v}}-{\color{red}b_{u}}+0\,{\color{blue}a_{f(n-1)}}\right)\left({\color{red}b_{v}}+{\color{red}b_{u}}+2\,{\color{blue}a_{f(n-1)}}\right)
+\begin{aligned}P_{g}= & \quad\prod_{0\leq i<j<n}\left(x_{j}-x_{i}\right)\times\\[10pt]
+ & \prod_{0\leq u<v\leq f\left(n-1\right)}\left(\left(x_{f(v)}-x_{v}\right)^{2}-\left(x_{f(u)}-x_{u}\right)^{2}\right)\times\\
+ & \prod_{\substack{v\in f^{-1}\left(\{f(n-1)\}\right)\\
+0\leq u\leq f\left(n-1\right)\\
+t\in\{0,1\}
+}
+}\left({\color{red}b_{u,v,t}}+{\color{blue}a_{f(n-1)}}\right)\times\\[10pt]
+ & \prod_{\substack{v\in f^{-1}\left(\{f(n-1)\}\right)\\
+f\left(n-1\right)<u<v
+}
+}\left({\color{red}b_{v}}-{\color{red}b_{u}}+0\,{\color{blue}a_{f(n-1)}}\right)\left({\color{red}b_{v}}+{\color{red}b_{u}}+2\,{\color{blue}a_{f(n-1)}}\right)\\[10pt]
+\end{aligned}
 \label{eq:Pg_telescoping}
 \end{equation}
 where
@@ -777,13 +968,13 @@ where
 {\color{blue} a_{f(n-1)}} = {\color{blue} (} x_{f^{(2)}(n-1)} - {\color{blue} x_{f(n-1)} )},
 \]
 \[
-{\color{red} b_{i}} = {\color{red} ( x_{f(i)} }- x_{i}  {\color{red} )},
+{\color{red} b_{i}} = {\color{red} ( x_{f(i)} }- x_{i}  {\color{red} )}, 
 \quad \forall \; i \in f^{-1}\left(\{f(n-1)\}\right),
 \]
 and
 \[
-{\color{red} b_{u,v,t}} = {\color{red} ( x_{f(v)}} - x_{v} {\color{red})}
-+ (-1)^{t} \left( x_{f(u)} - x_{u} \right),
+{\color{red} b_{u,v,t}} = {\color{red} ( x_{f(v)}} - x_{v} {\color{red})} 
++ (-1)^{t} \left( x_{f(u)} - x_{u} \right), 
 \quad \forall \;\;
 \substack{
     v \in f^{-1}\left(\{f(n-1)\}\right) \\
@@ -791,27 +982,30 @@ and
     t \in \{0, 1\}.
 }
 \]
-Note that adopting the same notation, we may also re-write $P_f$ in the equation above as follows:
-\[
-{\color{red}P_{f}}=\prod_{0\leq i<j<n}\left(x_{j}-x_{i}\right)\times
-\]
-\[
-\prod_{0\leq u<v\leq f(n-1)}\left(\left(x_{f(v)}-x_{v}\right)^{2}-\left(x_{f(u)}-x_{u}\right)^{2}\right)\times
-\]
-\[
-\prod_{v\in f^{-1}\left(\{f(n-1)\}\right),0\leq u\leq f(n-1),t\in\{0,1\}}{\color{red}b_{u,v,t}}\times
-\]
+Note that adopting the same notation, we may also re-write $P_f$ in equation \eqref{eq:Pf_broken} as follows:
 \begin{equation}
-\prod_{v\in f^{-1}\left(\{f(n-1)\}\right),f(n-1)<u<v}\left({\color{red}b_{v}}-{\color{red}b_{u}}\right)\left({\color{red}b_{v}}+{\color{red}b_{u}}\right).
-    \label{eq:Pf_rewrite}
+\begin{aligned}{\color{red}P_{f}} & =\:\prod_{0\leq i<j<n}\left(x_{j}-x_{i}\right)\times\\[10pt]
+ & \;\prod_{0\leq u<v\leq f\left(n-1\right)}\left(\left(x_{f(v)}-x_{v}\right)^{2}-\left(x_{f(u)}-x_{u}\right)^{2}\right)\times\\
+ & \prod_{\substack{v\in f^{-1}\left(\{f(n-1)\}\right)\\
+0\leq u\leq f(n-1)\\
+t\in\{0,1\}
+}
+}{\color{red}b_{u,v,t}}\;\times\\[10pt]
+ & \prod_{\substack{v\in f^{-1}\left(\{f(n-1)\}\right)\\
+f(n-1)<u<v
+}
+}\left({\color{red}b_{v}}-{\color{red}b_{u}}\right)\left({\color{red}b_{v}}+{\color{red}b_{u}}\right).\\[10pt]
+\end{aligned}
+\label{eq:Pf_rewrite}
 \end{equation}
+
 Invoking the {multi-binomial} identity on the two
 bichromatic factors of $P_{g}$ in equation \eqref{eq:Pg_telescoping} yields equalities
 \[
 \prod_{\substack{v \in f^{-1}\left(\{f(n-1)\}\right) \\ f(n-1) < u < v}} \left(\textcolor{red}{b_v} + \textcolor{red}{b_u} + 2 \textcolor{blue}{a_{f(n-1)}}\right) =
 \]
 \[
-\prod_{\substack{v \in f^{-1}\left(\{f(n-1)\}\right) \\ f(n-1) < u < v}} \big(\textcolor{red}{b_v} + \textcolor{red}{b_u}\big)
+\prod_{\substack{v \in f^{-1}\left(\{f(n-1)\}\right) \\ f(n-1) < u < v}} \big(\textcolor{red}{b_v} + \textcolor{red}{b_u}\big) 
 + \sum_{\substack{r_{u,v} \in \{0,1\} \\ 0 = \prod r_{u,v}}} \;
 \prod_{\substack{v \in f^{-1}\left(\{f(n-1)\}\right) \\ f(n-1) < u < v}} \big(\textcolor{red}{b_v} + \textcolor{red}{b_u}\big)^{r_{u,v}} \, \big(2 \textcolor{blue}{a_{f(n-1)}}\big)^{1-r_{u,v}}.
 \]
@@ -821,7 +1015,7 @@ and
 \]
 \[
 \prod_{\substack{t \in \{0,1\} \\ v \in f^{-1}\left(\{f(n-1)\}\right) \\ 0 \leq u \leq f(n-1)}} \textcolor{red}{b_{u,v,t}}
-+ \sum_{\substack{s_{u,v,t} \in \{0,1\} \\ 0 = \prod s_{u,v,t}}} \;
++ \sum_{\substack{s_{u,v,t} \in \{0,1\} \\ 0 = \prod s_{u,v,t}}} \; 
 \prod_{\substack{v \in f^{-1}\left(\{f(n-1)\}\right) \\ 0 \leq u \leq f(n-1) \\ t \in \{0,1\}}} \big(\textcolor{red}{b_{u,v,t}}\big)^{s_{u,v,t}} \, \big(\textcolor{blue}{a_{f(n-1)}}\big)^{1-s_{u,v,t}}.
 \]
 Substituting equalities immediately above into equation (\ref{eq:Pg_telescoping})
@@ -834,53 +1028,52 @@ The monochromatic red expressions in the multi-binomial expansion collect to res
 The second part denoted $R_{f,g}$ simply collects the remaining bichromatic
 summands and is given by
 \[
-R_{f,g}=\prod_{0\leq i<j<n}\left(x_{j}-x_{i}\right)\prod_{0\leq u<v\leq f(n-1)}\left((x_{f(v)}-x_{v})^{2}-(x_{f(u)}-x_{u})^{2}\right)\prod_{\substack{v\in f^{-1}(\{f(n-1)\})\\
-f(n-1)<u<v
-}
-}\left({\color{red}b_{v}}-{\color{red}b_{u}}\right)\times
+\begin{aligned}
+R_{f,g} &= \prod_{0 \leq i < j < n} \left( x_j - x_i \right) 
+\prod_{0 \leq u < v \leq f(n-1)} 
+\left( (x_{f(v)} - x_v)^2 - (x_{f(u)} - x_u)^2 \right) 
+\prod_{\substack{v \in f^{-1}(\{ f(n-1) \}) \\ f(n-1) < u < v}} 
+\left( {\color{red} b_v} - {\color{red} b_u} \right) \times \\ 
+& \quad 
+\Bigg[ 
+\Bigg(
+\prod_{\substack{v \in f^{-1}(\{ f(n-1) \}) \\ f(n-1) < u < v}} 
+\left( {\color{red} b_v} + {\color{red} b_u} \right)
+\Bigg)
+\Bigg(
+\sum_{\substack{s_{u,v,t} \in \{0,1\} \\ 0 = \prod s_{u,v,t}}} 
+\prod_{\substack{v \in f^{-1}(\{ f(n-1) \}) \\ 0 \leq u \leq f(n-1) \\ t \in \{0,1\}}} 
+\left( {\color{red} b_{u,v,t}} \right)^{s_{u,v,t}} 
+\left( {\color{blue} a_{f(n-1)}} \right)^{1-s_{u,v,t}} 
+\Bigg) + \\ 
+& \quad 
+\Bigg(
+\prod_{\substack{t \in \{0,1\} \\ v \in f^{-1}(\{ f(n-1) \}) \\ 0 \leq u \leq f(n-1)}} 
+{\color{red} b_{u,v,t}} 
+\Bigg)
+\Bigg( 
+\sum_{\substack{r_{u,v} \in \{0,1\} \\ 0 = \prod r_{u,v}}} 
+\prod_{\substack{v \in f^{-1}(\{ f(n-1) \}) \\ f(n-1) < u < v}} 
+\left( {\color{red} b_v} + {\color{red} b_u} \right)^{r_{u,v}} 
+\left( 2 {\color{blue} a_{f(n-1)}} \right)^{1-r_{u,v}} 
+\Bigg) + \\ 
+& \quad 
+\Bigg( 
+\sum_{\substack{s_{u,v,t} \in \{0,1\} \\ 0 = \prod s_{u,v,t}}} 
+\prod_{\substack{v \in f^{-1}(\{ f(n-1) \}) \\ 0 \leq u \leq f(n-1) \\ t \in \{0,1\}}} 
+\left( {\color{red} b_{u,v,t}} \right)^{s_{u,v,t}} 
+\left( {\color{blue} a_{f(n-1)}} \right)^{1-s_{u,v,t}} 
+\Bigg)
+\Bigg( 
+\sum_{\substack{r_{u,v} \in \{0,1\} \\ 0 = \prod r_{u,v}}} 
+\prod_{\substack{v \in f^{-1}(\{ f(n-1) \}) \\ f(n-1) < u < v}} 
+\left( {\color{red} b_v} + {\color{red} b_u} \right)^{r_{u,v}} 
+\left( 2 {\color{blue} a_{f(n-1)}} \right)^{1-r_{u,v}} 
+\Bigg)
+\Bigg] 
+\end{aligned}
 \]
-\[
-\Bigg[\Bigg(\prod_{\substack{v\in f^{-1}(\{f(n-1)\})\\
-f(n-1)<u<v
-}
-}\left({\color{red}b_{v}}+{\color{red}b_{u}}\right)\Bigg)\Bigg(\sum_{\substack{s_{u,v,t}\in\{0,1\}\\
-0=\prod s_{u,v,t}
-}
-}\prod_{\substack{v\in f^{-1}(\{f(n-1)\})\\
-0\leq u\leq f(n-1)\\
-t\in\{0,1\}
-}
-}\left({\color{red}b_{u,v,t}}\right)^{s_{u,v,t}}\left({\color{blue}a_{f(n-1)}}\right)^{1-s_{u,v,t}}\Bigg)+
-\]
-\[
-\Bigg(\prod_{\substack{t\in\{0,1\}\\
-v\in f^{-1}(\{f(n-1)\})\\
-0\leq u\leq f(n-1)
-}
-}{\color{red}b_{u,v,t}}\Bigg)\Bigg(\sum_{\substack{r_{u,v}\in\{0,1\}\\
-0=\prod r_{u,v}
-}
-}\prod_{\substack{v\in f^{-1}(\{f(n-1)\})\\
-f(n-1)<u<v
-}
-}\left({\color{red}b_{v}}+{\color{red}b_{u}}\right)^{r_{u,v}}\left(2{\color{blue}a_{f(n-1)}}\right)^{1-r_{u,v}}\Bigg)+
-\]
-\[
-\Bigg(\sum_{\substack{s_{u,v,t}\in\{0,1\}\\
-0=\prod s_{u,v,t}
-}
-}\prod_{\substack{v\in f^{-1}(\{f(n-1)\})\\
-0\leq u\leq f(n-1)\\
-t\in\{0,1\}
-}
-}\left({\color{red}b_{u,v,t}}\right)^{s_{u,v,t}}\left({\color{blue}a_{f(n-1)}}\right)^{1-s_{u,v,t}}\Bigg)\Bigg(\sum_{\substack{r_{u,v}\in\{0,1\}\\
-0=\prod r_{u,v}
-}
-}\prod_{\substack{v\in f^{-1}(\{f(n-1)\})\\
-f(n-1)<u<v
-}
-}\left({\color{red}b_{v}}+{\color{red}b_{u}}\right)^{r_{u,v}}\left(2{\color{blue}a_{f(n-1)}}\right)^{1-r_{u,v}}\Bigg)\Bigg]
-\]
+
 The color scheme introduced here is meant to help track the location
 of telescoping variables. We now proceed with the main {contradiction
 argument}. Assume for the sake of establishing a contradiction that
@@ -902,7 +1095,7 @@ namely the summand associated with binary exponent assignments
 s_{u,v,t}=0,\ \text{for all}\;\begin{array}{c}
 v\in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)\\
 0\le u\le f\left(n-1\right)\\
-t\in\left\{ 0,1\right\}
+t\in\left\{ 0,1\right\} 
 \end{array}\text{ as well as }r_{u,v}=0,\ \text{for all}\;\begin{array}{c}
 v\in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)\\
 0\le u\le f\left(n-1\right)
@@ -923,7 +1116,7 @@ f\left(n-1\right)<u<v
 \end{array}\right\} \right|+\left|\left\{ \begin{array}{c}
 v\in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)\\
 0\le u\le f\left(n-1\right)\\
-t\in\left\{ 0,1\right\}
+t\in\left\{ 0,1\right\} 
 \end{array}\right\} \right|\:\text{ and }\:c=2^{\left|\left\{ \begin{array}{c}
 v\in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)\\
 f\left(n-1\right)<u<v
@@ -931,11 +1124,14 @@ f\left(n-1\right)<u<v
 \end{equation}
 The said summand is thus given by
 \begin{equation}\label{eq:chosen-summand}
-c\,\underset{0\le i<j<n}{\prod}\left(x_{j}-x_{i}\right)\prod_{0\le u<v\le f\left(n-1\right)}\left((x_{f\left(v\right)}-x_{v})^{2}-(x_{f\left(u\right)}-x_{u})^{2}\right)\bigg(\prod_{v\in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)}\prod_{f\left(n-1\right)<u<v}{\color{red}(}x_{u}-x_{v}{\color{red})}\bigg){\color{blue}(}x_{f^{\left(2\right)}\left(n-1\right)}{\color{blue}-x_{f\left(n-1\right)})}^{m}.
+ c\,\underset{0\le i<j<n}{\prod}\left(x_{j}-x_{i}\right)\prod_{0\le u<v\le f\left(n-1\right)}\left((x_{f\left(v\right)}-x_{v})^{2}-(x_{f\left(u\right)}-x_{u})^{2}\right)\bigg(\prod_{\substack{v\in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)\\
+f\left(n-1\right)<u<v
+}
+}{\color{red}(}x_{u}-x_{v}{\color{red})}\bigg){\color{blue}(}x_{f^{\left(2\right)}\left(n-1\right)}{\color{blue}-x_{f\left(n-1\right)})}^{m}.  
 \end{equation}
 It follows from the premise $0\not\equiv P_{g}$
 that the remainder of the chosen summand is non\textendash vanishing.
-Observe that the factor
+Observe that the factor 
 \begin{equation}\label{eq:common-factor}
 \underset{0\le i<j<n}{\prod}\left(x_{j}-x_{i}\right)\prod_{0\le u<v\le f\left(n-1\right)}\left((x_{f\left(v\right)}-x_{v})^{2}-(x_{f\left(u\right)}-x_{u})^{2}\right)\prod_{\substack{v\in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)\\
 f\left(n-1\right)<u<v
@@ -952,7 +1148,7 @@ f\left(n-1\right)<u<v
 \]
 where
 \[
-Q_{f,g}=\Bigg(\prod_{\substack{v\in f^{-1}(\{f(n-1)\})\\
+\begin{aligned}Q_{f,g} & =\Bigg(\prod_{\substack{v\in f^{-1}(\{f(n-1)\})\\
 f(n-1)<u<v
 }
 }\left({\color{red}b_{v}}+{\color{red}b_{u}}\right)\Bigg)\Bigg(\sum_{\substack{s_{u,v,t}\in\{0,1\}\\
@@ -962,10 +1158,8 @@ f(n-1)<u<v
 0\leq u\leq f(n-1)\\
 t\in\{0,1\}
 }
-}\left({\color{red}b_{u,v,t}}\right)^{s_{u,v,t}}\left({\color{blue}a_{f(n-1)}}\right)^{1-s_{u,v,t}}\Bigg)+
-\]
-\[
-\Bigg(\prod_{\substack{t\in\{0,1\}\\
+}\left({\color{red}b_{u,v,t}}\right)^{s_{u,v,t}}\left({\color{blue}a_{f(n-1)}}\right)^{1-s_{u,v,t}}\Bigg)+\\
+ & \quad\Bigg(\prod_{\substack{t\in\{0,1\}\\
 v\in f^{-1}(\{f(n-1)\})\\
 0\leq u\leq f(n-1)
 }
@@ -975,10 +1169,8 @@ v\in f^{-1}(\{f(n-1)\})\\
 }\prod_{\substack{v\in f^{-1}(\{f(n-1)\})\\
 f(n-1)<u<v
 }
-}\left({\color{red}b_{v}}+{\color{red}b_{u}}\right)^{r_{u,v}}\left(2{\color{blue}a_{f(n-1)}}\right)^{1-r_{u,v}}\Bigg)+
-\]
-\[
-\Bigg(\sum_{\substack{s_{u,v,t}\in\{0,1\}\\
+}\left({\color{red}b_{v}}+{\color{red}b_{u}}\right)^{r_{u,v}}\left(2{\color{blue}a_{f(n-1)}}\right)^{1-r_{u,v}}\Bigg)+\\
+ & \quad\Bigg(\sum_{\substack{s_{u,v,t}\in\{0,1\}\\
 0=\prod s_{u,v,t}
 }
 }\prod_{\substack{v\in f^{-1}(\{f(n-1)\})\\
@@ -991,7 +1183,8 @@ t\in\{0,1\}
 }\prod_{\substack{v\in f^{-1}(\{f(n-1)\})\\
 f(n-1)<u<v
 }
-}\left({\color{red}b_{v}}+{\color{red}b_{u}}\right)^{r_{u,v}}\left(2{\color{blue}a_{f(n-1)}}\right)^{1-r_{u,v}}\Bigg)
+}\left({\color{red}b_{v}}+{\color{red}b_{u}}\right)^{r_{u,v}}\left(2{\color{blue}a_{f(n-1)}}\right)^{1-r_{u,v}}\Bigg).
+\end{aligned}
 \]
 Let
 \[
@@ -999,15 +1192,15 @@ Let
 \]
 Observe that for each $\sigma\in\Phi(g)$,
 there is a non-vanishing integer evaluation
-\[
-v_{\sigma}=\prod_{\substack{0\leq i<j<n}
-}\left(\sigma(j)-\sigma(i)\right)\prod_{\substack{0\leq u<v\leq f(n-1)}
-}\left(\big(\sigma f(v)-\sigma(v)\big)^{2}-\big(\sigma f(u)-\sigma(u)\big)^{2}\right)\prod_{\substack{v\in f^{-1}\left(\{f(n-1)\}\right)\\
-f(n-1)<u<v
-}
-}{\color{red}\big(}\sigma(u)-\sigma(v){\color{red}\big)}
-\]
-More generally, by Proposition \ref{prop:multivariate-quotient-remainder}, the premise $P_{g}\equiv R_{f,g}$ implies
+\begin{align}
+v_{\sigma} = & \prod_{\substack{0 \leq i < j < n}} 
+\left(\sigma(j) - \sigma(i)\right) \times \nonumber \\
+& \prod_{\substack{0 \leq u < v \leq f(n-1)}} 
+\left(\big(\sigma f(v) - \sigma(v)\big)^{2} - \big(\sigma f(u) - \sigma(u)\big)^{2}\right) \times \nonumber \\
+& \prod_{\substack{v \in f^{-1}\left(\{f(n-1)\}\right) \\ f(n-1) < u < v}} 
+{\color{red}\big(}\sigma(u)-\sigma(v){\color{red}\big)}.
+\end{align}
+More generally, by Proposition \ref{prop:multivariate-quotient-remainder}, the premise $P_{g}\equiv R_{f,g}$ implies 
 \begin{equation}
 P_{g}(h)=R_{f,g}\left(h\right)=v_{h}\,Q_{f,g}\left(h\right)=\begin{cases}
 \begin{array}{cc}
@@ -1017,9 +1210,9 @@ P_{g}(h)=R_{f,g}\left(h\right)=v_{h}\,Q_{f,g}\left(h\right)=\begin{cases}
 \end{array},\forall\:h\in\mathbb{Z}_{n}^{\mathbb{Z}_{n}}.\end{cases}
 \end{equation}
 Recall $Q_{f,g}$ is the remaining factor of $R_{f,g}$ excluding the common factor described in \eqref{eq:common-factor}. Specifically, $Q_{f,g}$ is a polynomial resulting from the sum over chromatic summands resulting from the multibinomial expansions.  Let us view $Q_{f,g}$ as a sum of $|\Sigma|$ summands and denote by $Q_{f, g}^{\left[s\right]}$ the summand $1 \leq s \leq |\Sigma|$ of $Q_{f,g}$. By Proposition \ref{prop:ring-homomorphism}, we can write the remainder of $R_{f,g}$ as follows:
-\begin{align*}
+\[
 R_{f,g}=\sum_{1\leq s\leq\left|\Sigma\right|}\bigg(\sum_{\sigma\in\Phi(g)}v_{\sigma}\cdot Q_{f,g}^{\left[s\right]}\left(\sigma\right)\cdot L_{\sigma}\left({\bf x}\right)\bigg),
-\end{align*}
+\]
 where
 \[
 L_{\sigma}({\bf x}):=\prod_{\substack{i\in\mathbb{Z}_{n}\\
@@ -1027,11 +1220,11 @@ j_{i}\in\mathbb{Z}_{n}\setminus\{\sigma(i)\}
 }
 }\bigg(\frac{x_{i}-j_{i}}{\sigma(i)-j_{i}}\bigg).
 \]
-Let us denote by ${L_{{\sigma}}\big({\bf x}_{Q}^{\left[s\right]}\big)}$ the factors of $L_{\sigma}\left({\bf x}\right)$ associated with variables present in $Q_{f,g}^{\left[s\right]}$. Then the evaluations of $R_{f,g}$ over the sublattice  $\Phi(g)$  cannot be distinguished from evaluations of the polynomial
+Let us denote by ${L_{{\sigma}}\big({\bf x}_{Q}^{\left[s\right]}\big)}$ the factor of $L_{\sigma}\left({\bf x}\right)$ associated with variables present in $Q_{f,g}^{\left[s\right]}$. Then the evaluations of $R_{f,g}$ over the sublattice  $\Phi(g)$  cannot be distinguished from evaluations of the polynomial
  \[
  \sum_{1\leq s\leq\left|\Sigma\right|}\bigg(\sum_{\sigma\in\Phi(g)}v_{\sigma}\cdot Q_{f,g}^{\left[s\right]}\left(\sigma\right)\cdot L_{\sigma}\big({\bf x}_{Q}^{\left[s\right]}\big)\bigg)
- \]
-over the same sublattice. By Lemma \ref{lem:transposition-invariance}, the premise $P_{g}\equiv R_{f,g}$
+ \] 
+over the same sublattice. By Lemma \ref{lem:transposition-invariance}, the premise $P_{g}\equiv R_{f,g}$ 
 implies that any transposition $\tau\in\text{S}_{n}$ which exchanges
 $x_{f(n-1)}$ with $x_{v}$ where $v\in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)$
 fixes the remainder of $R_{f,g}$,
@@ -1043,12 +1236,12 @@ is a sum over the same non--vanishing points, it is fixed by the said transposit
 \[
 \tau=\left(g(n-1),v\right)\in\text{Aut}\left(\sum_{1\leq s\leq\left|\Sigma\right|}\bigg(\sum_{\sigma\in\Phi(g)}v_{\sigma}\cdot Q_{f,g}^{\left[s\right]}\left(\sigma\right)\cdot L_{\sigma}\big({\bf x}_{Q}^{\left[s\right]}\big)\bigg)\right),
 \]
-for all $v\in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right).$
+for all $v\in f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)$.
 As a consequence of the multi-binomial expansion, the sum expressing
 $Q_{f,g}$ features as one of its summand a unique monochromatic blue binomial summand, say $Q_{f,g}^{\left[1\right]}$, given by
 \[
 Q_{f,g}^{\left[1\right]}=c\left({\color{blue}a_{f\left(n-1\right)}}\right)^{m}=c\,{\color{blue}(}x_{f^{\left(2\right)}\left(n-1\right)}{\color{blue}-x_{f\left(n-1\right)})}^{m}.
-\]
+\] 
 Thus, by Lemma \ref{lem:variable-dependency},
 \[
 Q_{f,g}^{\left[1\right]}\equiv c\,\sum_{\sigma\in\Phi(g)}{\color{blue}\big(}\sigma f^{(2)}(n-1){\color{blue}-\sigma f(n-1)\big)}^{m}\times
@@ -1059,7 +1252,7 @@ Q_{f,g}^{\left[1\right]}\equiv c\,\sum_{\sigma\in\Phi(g)}{\color{blue}\big(}\sig
 Let us now focus on the action of a transposition
 on individual summands of some polynomial resulting from an arbitrary but fixed partition
 of its non-vanishing monomial terms. There are exactly three distinct ways that a candidate
-transposition of variables can lie in the automorphism group of a
+transposition of a pair of variables can lie in the automorphism group of a
 given polynomial.  Assume that we reason about
 a particular summand denoted as $S$.
 \begin{enumerate}
@@ -1103,14 +1296,13 @@ can occur only for Lagrange bases
 \[
 \prod_{j_{f^{(2)}\left(n-1\right)}\in\mathbb{Z}_{n}\backslash\left\{ \sigma f^{(2)}\left(n-1\right)\right\} }\left(\frac{x_{f^{(2)}\left(n-1\right)}-j_{f^{(2)}\left(n-1\right)}}{\sigma f^{(2)}\left(n-1\right)-j_{f^{(2)}\left(n-1\right)}}\right)\prod_{j_{f\left(n-1\right)}\in\mathbb{Z}_{n}\backslash\left\{ \sigma f\left(n-1\right)\right\} }\left(\frac{{\color{blue}x_{f\left(n-1\right)}}-j_{f\left(n-1\right)}}{\sigma f\left(n-1\right)-j_{f\left(n-1\right)}}\right).
 \]
-where $\sigma\in\left\{ \theta\in\text{S}_{n}:G_{\theta g\theta^{-1}}\in\text{GrL}\left(G_{g}\right)\right\} $
+where $\sigma\in\Phi(g)$
 is subject to $\sigma\left(n-1\right)=0$ and $G_{f}$ is such that
 $1=\left|f^{-1}\left(\left\{ f\left(n-1\right)\right\} \right)\right|$.
 In that setting, non-vanishing monomials occurring in the expanded
 form of said Lagrange bases summands possibly cancel out non-vanishing
 monomials occurring in the expanded form of Lagrange bases expressing
-canonical representative of bi-chromatic summands in $Q_{f,g}$ of
-the form
+remainders of bi-chromatic summands in $Q_{f,g}$ of the form
 \[
 \left({\color{red}b_{f(n-1),n-1,t}}\right)^{r}\left({\color{blue}a_{f\left(n-1\right)}}\right)^{s}=\left({\color{red}(x_{f\left(n-1\right)}}-x_{n-1}{\color{red})}+\left(-1\right)^{t}(x_{f^{(2)}\left(n-1\right)}-x_{f\left(n-1\right)})\right)^{r}\left(x_{f^{\left(2\right)}\left(n-1\right)}{\color{blue}-x_{f\left(n-1\right)}}\right)^{s}.
 \]
@@ -1130,7 +1322,52 @@ complementary labeling symmetry, thereby resulting in the contradiction
 \[
 \tau=\left(g(n-1),v\right) \not\in\text{Aut}\left(\sum_{1\leq s\leq\left|\Sigma\right|}\bigg(\sum_{\sigma\in\Phi(g)}v_{\sigma}\cdot Q_{f,g}^{\left[s\right]}\left(\sigma\right)\cdot L_{\sigma}\big({\bf x}_{Q}^{\left[s\right]}\big)\bigg)\right).
 \]
-We conclude that the desired claim $\varnothing \ne \text{GrL}\left(G_{g}\right)\implies\text{GrL}\left(G_{f}\right)\ne \varnothing$
+We conclude that the desired claim $P_g ({\bf x}) \not\equiv 0  \implies  P_{f} ({\bf x}) \not\equiv 0.$
 holds.
 \end{proof}
 
+\begin{example} We present a verification of Lemma \ref{lem:composition-lemma} with an example of a path on 5 vertices.
+\ \\
+\begin{center}   $G_f: \;$
+\resizebox{!}{3em}{
+\begin{tikzpicture}[>={Stealth[round]}, node distance=2cm and 1cm, every node/.style={circle, draw, minimum size=1cm}]
+    % Define vertices
+    \node (v0) at (0, 0) {0};
+    \node (v1) at (3, 0) {1};
+    \node (v2) at (6, 0) {2};
+    \node (v3) at (9, 0) {3};
+    \node (v4) at (12, 0) {4};
+    
+    % Draw edges
+    \draw [->] (v1) to (v0); % Edge 1 -> 0
+    \draw [->] (v2) to (v1); % Edge 2 -> 1
+    \draw [->] (v3) to (v2); % Edge 3 -> 2
+    \draw [->] (v4) to (v3); % Edge 4 -> 3
+    \draw[->] (v0) edge[loop above] (v0); % Self-loop at 0
+\end{tikzpicture}
+}
+\end{center}
+\ \\
+\begin{center}   
+$G_g: \;$
+\resizebox{!}{3em}{
+\begin{tikzpicture}[>={Stealth[round]}, node distance=2cm and 1cm, every node/.style={circle, draw, minimum size=1cm}]
+    % Define vertices
+    \node (v0) at (0, 0) {0};
+    \node (v1) at (3, 0) {1};
+    \node (v2) at (6, 0) {2};
+    \node (v3) at (9, 0) {3};
+    \node (v4) at (12, 0) {4};
+    
+    % Draw edges
+    \draw [->] (v1) to (v0); % Edge 1 -> 0
+    \draw [->] (v2) to (v1); % Edge 2 -> 1
+    \draw [->] (v3) to (v2); % Edge 3 -> 2
+    \draw [->] (v4) edge[bend right] (v2); % Edge 4 -> 2
+    \draw[->] (v0) edge[loop above] (v0); % Self-loop at 0
+\end{tikzpicture}
+}
+\end{center}
+
+Run the SageMath script \texttt{ex1434.sage} to verify.
+\end{example}
